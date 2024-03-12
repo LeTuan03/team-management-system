@@ -122,7 +122,7 @@ const Page = () => {
     <>
       <Head>
         <title>
-          Lịch thi đấu | Team management system
+          Team management | Team management system
         </title>
       </Head>
       <Box
@@ -141,7 +141,7 @@ const Page = () => {
             >
               <Stack spacing={1}>
                 <Typography variant="h4">
-                  Danh sách cầu thủ
+                  List teams
                 </Typography>
               </Stack>
               <div>
@@ -154,7 +154,7 @@ const Page = () => {
                   onClick={handleClickOpen}
                   variant="contained"
                 >
-                  Thêm mới
+                  Add
                 </Button>
               </div>
             </Stack>

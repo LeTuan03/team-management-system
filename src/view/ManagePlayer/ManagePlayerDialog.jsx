@@ -25,7 +25,7 @@ export default function ManagePlayerDialog(props) {
         handleClose,
         item
     } = props;
-    console.log(item)
+    
     const handleSubmit = async () => {
 
     }
@@ -41,7 +41,7 @@ export default function ManagePlayerDialog(props) {
         >
             <ValidatorForm onSubmit={handleSubmit}>
                 <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
-                    Thêm mới/Cập nhật cầu thủ
+                    Add new/Update players
                 </DialogTitle>
                 <DialogContent dividers>
                     <Grid container>
@@ -58,10 +58,10 @@ export default function ManagePlayerDialog(props) {
                 </DialogContent>
                 <DialogActions>
                 <Button  variant="contained" onClick={handleClose} color="error">
-                    Hủy
+                    Cancel
                 </Button>
                 <Button  variant="contained" type="submit">
-                    Lưu
+                    Save
                 </Button>
                 </DialogActions>
             </ValidatorForm>

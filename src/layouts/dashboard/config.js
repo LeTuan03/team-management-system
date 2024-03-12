@@ -8,6 +8,8 @@ import UsersIcon from '@heroicons/react/24/solid/UsersIcon';
 import UserGroupIcon from '@heroicons/react/24/solid/UserGroupIcon';
 import CalendarIcon from '@heroicons/react/24/solid/CalendarIcon';
 import XCircleIcon from '@heroicons/react/24/solid/XCircleIcon';
+import ChartBarSquareIcon from '@heroicons/react/24/solid/ChartBarSquareIcon';
+import CreditCardIcon from '@heroicons/react/24/solid/CreditCardIcon';
 import { SvgIcon } from '@mui/material';
 
 export const items = [
@@ -39,7 +41,7 @@ export const items = [
     )
   },
   {
-    title: 'Schedule and manage matches',
+    title: 'Schedule and matches',
     path: '/manage-calendar',
     icon: (
       <SvgIcon fontSize="small">
@@ -48,34 +50,52 @@ export const items = [
     )
   },
   {
-    title: 'Companies',
-    path: '/companies',
+    title: 'Statistics and analysis',
+    path: '/statistics-analysis',
     icon: (
       <SvgIcon fontSize="small">
-        <ShoppingBagIcon />
+        <ChartBarSquareIcon />
       </SvgIcon>
     )
   },
   {
-    title: 'Account',
-    path: '/account',
+    title: 'Account management',
+    path: '/manage-account',
     icon: (
       <SvgIcon fontSize="small">
-        <UserIcon />
+        <CreditCardIcon />
       </SvgIcon>
     )
   },
+  // {
+  //   title: 'Companies',
+  //   path: '/companies',
+  //   icon: (
+  //     <SvgIcon fontSize="small">
+  //       <ShoppingBagIcon />
+  //     </SvgIcon>
+  //   )
+  // },
+  // {
+  //   title: 'Account',
+  //   path: '/account',
+  //   icon: (
+  //     <SvgIcon fontSize="small">
+  //       <UserIcon />
+  //     </SvgIcon>
+  //   )
+  // },
+  // {
+  //   title: 'Settings',
+  //   path: '/settings',
+  //   icon: (
+  //     <SvgIcon fontSize="small">
+  //       <CogIcon />
+  //     </SvgIcon>
+  //   )
+  // },
   {
-    title: 'Settings',
-    path: '/settings',
-    icon: (
-      <SvgIcon fontSize="small">
-        <CogIcon />
-      </SvgIcon>
-    )
-  },
-  {
-    title: 'Login',
+    title: 'Log out',
     path: '/auth/login',
     icon: (
       <SvgIcon fontSize="small">
@@ -83,22 +103,22 @@ export const items = [
       </SvgIcon>
     )
   },
-  {
-    title: 'Register',
-    path: '/auth/register',
-    icon: (
-      <SvgIcon fontSize="small">
-        <UserPlusIcon />
-      </SvgIcon>
-    )
-  },
-  {
-    title: 'Error',
-    path: '/404',
-    icon: (
-      <SvgIcon fontSize="small">
-        <XCircleIcon />
-      </SvgIcon>
-    )
-  }
+  // {
+  //   title: 'Register',
+  //   path: '/auth/register',
+  //   icon: (
+  //     <SvgIcon fontSize="small">
+  //       <UserPlusIcon />
+  //     </SvgIcon>
+  //   )
+  // },
+  // {
+  //   title: 'Error',
+  //   path: '/404',
+  //   icon: (
+  //     <SvgIcon fontSize="small">
+  //       <XCircleIcon />
+  //     </SvgIcon>
+  //   )
+  // }
 ];

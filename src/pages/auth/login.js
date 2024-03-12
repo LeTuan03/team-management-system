@@ -22,19 +22,18 @@ import { Layout as AuthLayout } from 'src/layouts/auth/layout';
 const Page = () => {
   const router = useRouter();
   const auth = useAuth();
-  const [method, setMethod] = useState('email');
+  const [method, setMethod] = useState('username');
   const formik = useFormik({
     initialValues: {
-      email: 'demo@devias.io',
+      username: 'demo@devias.io',
       password: 'Password123!',
       submit: null
     },
     validationSchema: Yup.object({
-      email: Yup
+      username: Yup
         .string()
-        .email('Must be a valid email')
         .max(255)
-        .required('Email is required'),
+        .required('username is required'),
       password: Yup
         .string()
         .max(255)
@@ -42,7 +41,7 @@ const Page = () => {
     }),
     onSubmit: async (values, helpers) => {
       try {
-        await auth.signIn(values.email, values.password);
+        await auth.signIn(values.username, values.password);
         router.push('/');
       } catch (err) {
         helpers.setStatus({ success: false });
@@ -71,7 +70,7 @@ const Page = () => {
     <>
       <Head>
         <title>
-          Đăng nhập | Team management system
+          Login | Team management system
         </title>
       </Head>
       <Box
@@ -97,9 +96,9 @@ const Page = () => {
               sx={{ mb: 3 }}
             >
               <Typography variant="h4">
-                Đăng nhập
+                Login
               </Typography>
-              <Typography
+              {/* <Typography
                 color="text.secondary"
                 variant="body2"
               >
@@ -113,7 +112,7 @@ const Page = () => {
                 >
                   Đăng ký
                 </Link>
-              </Typography>
+              </Typography> */}
             </Stack>
             {/* <Tabs
               onChange={handleMethodChange}
@@ -136,21 +135,21 @@ const Page = () => {
               >
                 <Stack spacing={3}>
                   <TextField
-                    error={!!(formik.touched.email && formik.errors.email)}
+                    error={!!(formik.touched.username && formik.errors.username)}
                     fullWidth
-                    helperText={formik.touched.email && formik.errors.email}
-                    label="Địa chỉ Email"
-                    name="email"
+                    helperText={formik.touched.username && formik.errors.username}
+                    label="Username"
+                    name="username"
                     onBlur={formik.handleBlur}
                     onChange={formik.handleChange}
-                    type="email"
-                    value={formik.values.email}
+                    type="text"
+                    value={formik.values.username}
                   />
                   <TextField
                     error={!!(formik.touched.password && formik.errors.password)}
                     fullWidth
                     helperText={formik.touched.password && formik.errors.password}
-                    label="Mật khẩu"
+                    label="Password"
                     name="password"
                     onBlur={formik.handleBlur}
                     onChange={formik.handleChange}
@@ -177,7 +176,7 @@ const Page = () => {
                   type="submit"
                   variant="contained"
                 >
-                  Đăng nhập
+                  Login
                 </Button>
                 {/* <Button
                   fullWidth

@@ -127,9 +127,9 @@ export const AuthProvider = (props) => {
     });
   };
 
-  const signIn = async (email, password) => {
-    if (email !== 'demo@devias.io' || password !== 'Password123!') {
-      throw new Error('Please check your email and password');
+  const signIn = async (username, password) => {
+    if (username !== 'demo@devias.io' || password !== 'Password123!') {
+      throw new Error('Please check your username and password');
     }
 
     try {

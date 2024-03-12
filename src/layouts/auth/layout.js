@@ -79,7 +79,6 @@ export const Layout = (props) => {
               }}
               variant="h1"
             >
-              Chào mừng đến {' '}
               <Box
                 component="a"
                 sx={{ color: '#15B79E' }}

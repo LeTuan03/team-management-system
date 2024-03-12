@@ -75,7 +75,7 @@ const Page = () => {
 
   const columns=[
     {
-      title: 'Thao tác', 
+      title: 'Action', 
       field: '',
       maxWidth: 100,
       minWidth: 100,
@@ -135,7 +135,7 @@ const Page = () => {
             >
               <Stack spacing={1}>
                 <Typography variant="h4">
-                  Lịch thi đấu
+                  List matches
                 </Typography>
               </Stack>
               <div>
@@ -148,7 +148,7 @@ const Page = () => {
                   onClick={handleClickOpen}
                   variant="contained"
                 >
-                  Thêm mới
+                  Add
                 </Button>
               </div>
             </Stack>

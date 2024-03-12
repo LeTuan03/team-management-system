@@ -1,20 +1,14 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Head from 'next/head';
-import { subDays, subHours } from 'date-fns';
-import ArrowDownOnSquareIcon from '@heroicons/react/24/solid/ArrowDownOnSquareIcon';
-import ArrowUpOnSquareIcon from '@heroicons/react/24/solid/ArrowUpOnSquareIcon';
 import PencilIcon from '@heroicons/react/24/solid/PencilIcon';
 import TrashIcon from '@heroicons/react/24/solid/TrashIcon';
 import PlusIcon from '@heroicons/react/24/solid/PlusIcon';
 import { Box, Button, Container, Icon, IconButton, Stack, SvgIcon, Typography } from '@mui/material';
-import { useSelection } from 'src/hooks/use-selection';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
-import { CustomersSearch } from 'src/sections/customer/customers-search';
-import { applyPagination } from 'src/utils/apply-pagination';
-import { ManagePlayerTable } from 'src/view/ManagePlayer/ManagePlayerTable';
 import Tooltip from '@material-ui/core/Tooltip';
 import { withStyles } from '@material-ui/core/styles';
-import ManagePlayerDialog from 'src/view/ManagePlayer/ManagePlayerDialog';
+import { ManageCalendarTable } from 'src/view/ManageCalendar/ManageCalendarTable';
+import ManageCalendarDialog from 'src/view/ManageCalendar/ManageCalendarDialog';
 
 const LightTooltip = withStyles((theme) => ({
   tooltip: {
@@ -122,7 +116,7 @@ const Page = () => {
     <>
       <Head>
         <title>
-          Manage player information | Team management system
+          Statistics and analysis | Team management system
         </title>
       </Head>
       <Box
@@ -141,7 +135,7 @@ const Page = () => {
             >
               <Stack spacing={1}>
                 <Typography variant="h4">
-                  List player
+                  Statistics and analysis
                 </Typography>
               </Stack>
               <div>
@@ -159,7 +153,7 @@ const Page = () => {
               </div>
             </Stack>
             {/* <CustomersSearch /> */}
-            <ManagePlayerTable
+            <ManageCalendarTable
               columns={columns}
               listItem={listItem}
             />
@@ -167,7 +161,7 @@ const Page = () => {
         </Container>
       </Box>
       <div>
-        <ManagePlayerDialog
+        <ManageCalendarDialog
           open={open}
           handleClose={handleClose}
           item={item}

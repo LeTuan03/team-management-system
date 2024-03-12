@@ -19,13 +19,13 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   },
 }));
 
-export default function ManageTeamDialog(props) {
+export default function ManageAccountDialog(props) {
     let {
         open, 
         handleClose,
         item
     } = props;
-    console.log(item)
+    
     const handleSubmit = async () => {
 
     }
@@ -41,7 +41,7 @@ export default function ManageTeamDialog(props) {
         >
             <ValidatorForm onSubmit={handleSubmit}>
                 <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
-                    Add new/Update football team
+                    Thêm mới/Cập nhật cầu thủ
                 </DialogTitle>
                 <DialogContent dividers>
                     <Grid container>
@@ -58,10 +58,10 @@ export default function ManageTeamDialog(props) {
                 </DialogContent>
                 <DialogActions>
                 <Button  variant="contained" onClick={handleClose} color="error">
-                    Cancel
+                    Hủy
                 </Button>
                 <Button  variant="contained" type="submit">
-                    Save
+                    Lưu
                 </Button>
                 </DialogActions>
             </ValidatorForm>

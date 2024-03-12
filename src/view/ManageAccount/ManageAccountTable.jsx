@@ -6,7 +6,7 @@ import MaterialTable from 'material-table';
 import { DeleteOutline, Edit, SaveAlt, FilterList, FirstPage, LastPage, ChevronLeft, ChevronRight, Save } from '@material-ui/icons';
 
 
-export const ManagePlayerTable = (props) => {
+export const ManageAccountTable = (props) => {
   const { 
     columns,
     listItem

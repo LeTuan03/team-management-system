@@ -11,10 +11,10 @@ import { useSelection } from 'src/hooks/use-selection';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
 import { CustomersSearch } from 'src/sections/customer/customers-search';
 import { applyPagination } from 'src/utils/apply-pagination';
-import { ManagePlayerTable } from 'src/view/ManagePlayer/ManagePlayerTable';
 import Tooltip from '@material-ui/core/Tooltip';
 import { withStyles } from '@material-ui/core/styles';
-import ManagePlayerDialog from 'src/view/ManagePlayer/ManagePlayerDialog';
+import { ManageAccountTable } from 'src/view/ManageAccount/ManageAccountTable';
+import ManageAccountDialog from 'src/view/ManageAccount/ManageAccountDialog';
 
 const LightTooltip = withStyles((theme) => ({
   tooltip: {
@@ -81,7 +81,7 @@ const Page = () => {
 
   const columns=[
     {
-      title: 'Action', 
+      title: 'Thao tác', 
       field: '',
       maxWidth: 100,
       minWidth: 100,
@@ -122,7 +122,7 @@ const Page = () => {
     <>
       <Head>
         <title>
-          Manage player information | Team management system
+          Account management | Team management system
         </title>
       </Head>
       <Box
@@ -141,7 +141,7 @@ const Page = () => {
             >
               <Stack spacing={1}>
                 <Typography variant="h4">
-                  List player
+                  Account management
                 </Typography>
               </Stack>
               <div>
@@ -159,7 +159,7 @@ const Page = () => {
               </div>
             </Stack>
             {/* <CustomersSearch /> */}
-            <ManagePlayerTable
+            <ManageAccountTable
               columns={columns}
               listItem={listItem}
             />
@@ -167,7 +167,7 @@ const Page = () => {
         </Container>
       </Box>
       <div>
-        <ManagePlayerDialog
+        <ManageAccountDialog
           open={open}
           handleClose={handleClose}
           item={item}
