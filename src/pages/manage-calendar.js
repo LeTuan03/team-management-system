@@ -161,11 +161,11 @@ const Page = () => {
         </Container>
       </Box>
       <div>
-        <ManageCalendarDialog
+        {open && <ManageCalendarDialog
           open={open}
           handleClose={handleClose}
           item={item}
-        />
+        />}
       </div>
     </>
   );

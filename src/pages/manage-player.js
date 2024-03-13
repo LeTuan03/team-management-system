@@ -15,6 +15,12 @@ import { ManagePlayerTable } from 'src/view/ManagePlayer/ManagePlayerTable';
 import Tooltip from '@material-ui/core/Tooltip';
 import { withStyles } from '@material-ui/core/styles';
 import ManagePlayerDialog from 'src/view/ManagePlayer/ManagePlayerDialog';
+import ConfirmDialog from 'src/view/Dialog/ConfirmDialog';
+import { deletePlayer, getAllPlayer } from 'src/view/ManagePlayer/ManagePlayerServices';
+import { CODE } from 'src/AppConst';
+import { format } from 'date-fns';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const LightTooltip = withStyles((theme) => ({
   tooltip: {
@@ -54,28 +60,51 @@ const Page = () => {
   const [item, setItem] = useState(null);
 
   const [open, setOpen] = useState(false);
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   
   const handleClickOpen = () => {
     setOpen(true);
   };
+
   const handleClose = () => {
     setOpen(false);
+    setOpenDeleteDialog(false);
+    setItem(null);
   };
 
   const handleEdit = (data) => {
     setOpen(true);
     setItem(data)
   }
-  const handleDelete = (id) => {
 
+  const handleDelete = (id) => {
+    setItem(id);
+    setOpenDeleteDialog(true);
+  }
+
+  const handleYesDelete = async () => {
+    try {
+      const data = await deletePlayer(item?.idplayer);
+      toast.success("Delete player success");
+      updatePageData();
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  const updatePageData = async () => {
+    try {
+      const data = await getAllPlayer();
+      if(data.status === CODE.SUCCESS) {
+        setListItem(data?.data);
+      }
+    } catch (error){
+      console.error(error);
+    }
   }
 
   useEffect(() => {
-    //fake data
-    setListItem([
-      { name: 'Mehmet', surname: 'Baran', birthYear: 1987, birthCity: 63 },
-      { name: 'Zerya Betül', surname: 'Baran', birthYear: 2017, birthCity: 34 },
-    ])
+    updatePageData();
   }, []);
 
 
@@ -102,19 +131,43 @@ const Page = () => {
       )
     },
     { 
-      title: 'Name', 
-      field: 'name',
+      title: 'Full name', 
+      field: 'fullName',
+      minWidth: 300,
     },
     { 
-      title: 'Surname', 
-      field: 'surname' },
+      title: 'Date of birth', 
+      field: 'dateOfBirth', 
+      minWidth: 150,
+      align: "center",
+      render: (rowData) => rowData?.dateOfBirth && format(new Date(rowData?.dateOfBirth), 'dd/MM/yyyy') 
+    },
     { 
-      title: 'Birth Year', 
-      field: 'birthYear',
+      title: 'Country', 
+      field: 'country',
+      minWidth: 200,
     }, 
     {
-      title: 'Birth Place',
-      field: 'birthCity',
+      title: 'Position',
+      field: 'position',
+      minWidth: 200,
+      align: "center"
+    },
+    {
+      title: 'Jersey Number',
+      field: 'jerseyNumber',
+      minWidth: 150,
+      align: "center"
+    },
+    {
+      title: 'Email',
+      field: 'email',
+      minWidth: 300,
+    },
+    {
+      title: 'Phone',
+      field: 'phone',
+      minWidth: 200,
     },
   ];
 
@@ -167,12 +220,20 @@ const Page = () => {
         </Container>
       </Box>
       <div>
-        <ManagePlayerDialog
+        {open && <ManagePlayerDialog
           open={open}
-          handleClose={handleClose}
           item={item}
-        />
+          handleClose={handleClose}
+          updatePageData={updatePageData}
+        />}
+        {openDeleteDialog && <ConfirmDialog
+          open={openDeleteDialog}
+          text={"Confirm delete this player"}
+          handleClose={handleClose}
+          handleOk={handleYesDelete}
+        />}
       </div>
+      <ToastContainer  autoClose={1000}/>
     </>
   );
 };

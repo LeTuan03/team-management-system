@@ -40,11 +40,13 @@ export default function ManageCalendarDialog(props) {
     }
 
     const handleSetData = (value, name) => {
+        console.log(value)
         setDataState((pre) => ({...pre, [name]: value}));
     }
 
     React.useEffect(() => {
         setDataState({...item});
+        console.log(item)
     }, [])
     return (
         <BootstrapDialog
@@ -66,6 +68,7 @@ export default function ManageCalendarDialog(props) {
                                 <DatePicker
                                     className='w-100'
                                     label="Time start"
+                                    format='dd/mm/yyyy'
                                     value={dataState?.date}
                                     onChange={(value) => handleSetData( value, "date" )}
                                     // variant="standard" 

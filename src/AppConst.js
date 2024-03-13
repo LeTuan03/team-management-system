@@ -9,3 +9,8 @@ export const STATUS_MATCH = [
     {code: 2, name: "In Progress"},
     {code: 3, name: "Done"},
 ]
+
+export const CODE = {
+    SUCCESS: 200,
+    ERROR: 404
+}

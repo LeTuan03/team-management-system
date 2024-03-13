@@ -7,8 +7,16 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import { Grid } from '@mui/material';
+import { Autocomplete, Grid } from '@mui/material';
 import { TextValidator, ValidatorForm } from 'react-material-ui-form-validator';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { CODE, TYPE_MATCH } from 'src/AppConst';
+import { convertDate, filterOptions } from 'src/AppFunction';
+import { updatePlayer } from './ManagePlayerServices';
+import { getAllTeam } from '../ManageTeam/ManageTeamServices';
+import { toast } from 'react-toastify';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialogContent-root': {
@@ -23,12 +31,53 @@ export default function ManagePlayerDialog(props) {
     let {
         open, 
         handleClose,
-        item
+        item,
+        updatePageData
     } = props;
     
-    const handleSubmit = async () => {
-
+    const [dataState, setDataState] = React.useState({});
+    const [listTeam, setListTeam] = React.useState([]);
+    const validateSubmit = () => {
+        return true;
     }
+    
+    const handleSubmit = async () => {
+        try {
+            if(!validateSubmit()) return;
+            const data = await updatePlayer({ ...dataState, idteam: dataState?.team?.idteam });
+            if(data?.status === CODE.SUCCESS) {
+                toast.success("Update player success");
+                handleClose();
+                updatePageData();
+            }
+        } catch (error){
+            console.error(error);
+        }
+    }
+
+    const handleSetData = (value, name) => {
+        setDataState((pre) => ({...pre, [name]: value}));
+    }
+
+    const getListTeam = async () => {
+        try {
+            const data = await getAllTeam();
+            if(data?.status == CODE.SUCCESS) {
+                setListTeam(data?.data)
+            }
+        } catch (error) {
+            
+        } 
+    }
+    React.useEffect(() => {
+        setDataState({
+            ...item,
+            dateOfBirth: convertDate(item?.dateOfBirth),
+            contractStartDate: convertDate(item?.contractStartDate),
+            contractEndDate: convertDate(item?.contractEndDate),
+        });
+        getListTeam();
+    }, []);
 
     return (
         <BootstrapDialog
@@ -44,14 +93,156 @@ export default function ManagePlayerDialog(props) {
                     Add new/Update players
                 </DialogTitle>
                 <DialogContent dividers>
-                    <Grid container>
-                        <Grid item>
-                        <TextValidator
-                            label={'sssss'}
-                            type="text"
-                            name="name"
-                            validators={['required']}
-                            errorMessages={['general.required']}
+                    <Grid container spacing={2}>
+                        
+                    </Grid>
+                    <Grid container spacing={2}>
+                        <Grid item md={4} sm={6} xs={12}>
+                            <TextValidator
+                                label={'Full name'}
+                                className='w-100'
+                                type="text"
+                                name="fullName"
+                                value={dataState?.fullName}
+                                onChange={(event) => handleSetData( event.target.value, "fullName")}
+                                validators={['required']}
+                                errorMessages={['general.required']}
+                            />
+                        </Grid>
+                        <Grid item md={4} sm={6} xs={12}>
+                            <TextValidator
+                                label={'Country'}
+                                className='w-100'
+                                type="text"
+                                name="country"
+                                value={dataState?.country}
+                                onChange={(event) => handleSetData( event.target.value, "country")}
+                                validators={['required']}
+                                errorMessages={['general.required']}
+                            />
+                        </Grid>
+                        <Grid item md={4} sm={6} xs={12}>
+                            <TextValidator
+                                label={'Position'}
+                                className='w-100'
+                                type="text"
+                                name="position"
+                                value={dataState?.position}
+                                onChange={(event) => handleSetData( event.target.value, "position")}
+                                validators={['required']}
+                                errorMessages={['general.required']}
+                            />
+                        </Grid>
+                        <Grid item md={4} sm={6} xs={12}>
+                            <Autocomplete
+                                className="mt-3"
+                                id="combo-box"
+                                size="small"
+                                fullWidth
+                                options= {listTeam}
+                                onChange={(event, value) => handleSetData(value, "team")}
+                                value={dataState?.team
+                                    || null}
+                                getOptionLabel={(option) => option.teamName || ""}
+                                filterOptions={filterOptions}
+                                renderInput={(params) => (
+                                <TextValidator
+                                    {...params}
+                                    label="Team"
+                                    value={dataState?.team || ""}
+                                />
+                                )}
+                                validators={["required"]}
+                                errorMessages={["general.required"]}
+                            />
+                        </Grid>
+                        <Grid item md={4} sm={6} xs={12}>
+                            <TextValidator
+                                label={'Jersey number'}
+                                className='w-100'
+                                type="text"
+                                name="jerseyNumber"
+                                value={dataState?.jerseyNumber}
+                                onChange={(event) => handleSetData( event.target.value, "jerseyNumber")}
+                                validators={['required']}
+                                errorMessages={['general.required']}
+                            />
+                        </Grid>
+                        <Grid item md={4} sm={6} xs={12}>
+                            <TextValidator 
+                                label={'Date of birth'}
+                                className='w-100'
+                                type='date' 
+                                name="dateOfBirth"
+                                value={dataState?.dateOfBirth}
+                                onChange={(event) => handleSetData( event.target.value, "dateOfBirth")}
+                            />
+                        </Grid>
+                        <Grid item md={4} sm={6} xs={12}>
+                            <TextValidator 
+                                label={'Contract start date'}
+                                className='w-100'
+                                type='date' 
+                                name="contractStartDate"
+                                value={dataState?.contractStartDate}
+                                onChange={(event) => handleSetData( event.target.value, "contractStartDate")}
+                            />
+                        </Grid>
+                        <Grid item md={4} sm={6} xs={12}>
+                            <TextValidator 
+                                label={'Contract end date'}
+                                className='w-100'
+                                type='date' 
+                                value={dataState?.contractEndDate}
+                                onChange={(event) => handleSetData( event.target.value, "contractEndDate")}
+                            />
+                        </Grid>
+                        <Grid item md={4} sm={6} xs={12}>
+                            <TextValidator
+                                label={'Height'}
+                                className='w-100'
+                                type="text"
+                                name="height"
+                                value={dataState?.height}
+                                onChange={(event) => handleSetData( event.target.value, "height")}
+                                validators={['required']}
+                                errorMessages={['general.required']}
+                            />
+                        </Grid>
+                        <Grid item md={4} sm={6} xs={12}>
+                            <TextValidator
+                                label={'Weight'}
+                                className='w-100'
+                                type="text"
+                                name="weight"
+                                value={dataState?.weight}
+                                onChange={(event) => handleSetData( event.target.value, "weight")}
+                                validators={['required']}
+                                errorMessages={['general.required']}
+                            />
+                        </Grid>
+                        <Grid item md={4} sm={6} xs={12}>
+                            <TextValidator
+                                label={'Email'}
+                                className='w-100'
+                                type="text"
+                                name="email"
+                                value={dataState?.email}
+                                onChange={(event) => handleSetData( event.target.value, "email")}
+                                validators={['required']}
+                                errorMessages={['general.required']}
+                            />
+                        </Grid>
+                        <Grid item md={4} sm={6} xs={12}>
+                            <TextValidator
+                                label={'Phone'}
+                                className='w-100'
+                                type="text"
+                                name="phone"
+                                value={dataState?.phone}
+                                onChange={(event) => handleSetData( event.target.value, "phone")}
+                                validators={['required']}
+                                errorMessages={['general.required']}
                             />
                         </Grid>
                     </Grid>

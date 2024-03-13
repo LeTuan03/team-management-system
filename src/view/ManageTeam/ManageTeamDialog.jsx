@@ -9,6 +9,9 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import { Grid } from '@mui/material';
 import { TextValidator, ValidatorForm } from 'react-material-ui-form-validator';
+import { updateTeam } from './ManageTeamServices';
+import { CODE } from 'src/AppConst';
+import { toast } from 'react-toastify';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialogContent-root': {
@@ -23,12 +26,38 @@ export default function ManageTeamDialog(props) {
     let {
         open, 
         handleClose,
-        item
+        item,
+        updatePageData
     } = props;
-    console.log(item)
-    const handleSubmit = async () => {
 
+    const [dataState, setDataState] = React.useState({});
+    const validateSubmit = () => {
+        return true;
     }
+    
+    const handleSubmit = async () => {
+        try {
+            if(!validateSubmit()) return;
+            const data = await updateTeam({ ...dataState });
+            if(data?.status === CODE.SUCCESS) {
+                toast.success("Update team success");
+                handleClose();
+                updatePageData();
+            }
+        } catch (error){
+            console.error(error);
+        }
+    }
+
+    const handleSetData = (value, name) => {
+        setDataState((pre) => ({...pre, [name]: value}));
+    }
+
+    React.useEffect(() => {
+        setDataState({
+            ...item
+        });
+    }, []);
 
     return (
         <BootstrapDialog
@@ -44,14 +73,41 @@ export default function ManageTeamDialog(props) {
                     Add new/Update football team
                 </DialogTitle>
                 <DialogContent dividers>
-                    <Grid container>
-                        <Grid item>
-                        <TextValidator
-                            label={'sssss'}
-                            type="text"
-                            name="name"
-                            validators={['required']}
-                            errorMessages={['general.required']}
+                    <Grid container spacing={2}>
+                        <Grid item md={4} sm={6} xs={12}>
+                            <TextValidator
+                                label={'Team name'}
+                                className='w-100'
+                                type="text"
+                                name="teamName"
+                                value={dataState?.teamName}
+                                onChange={(event) => handleSetData( event.target.value, "teamName")}
+                                validators={['required']}
+                                errorMessages={['general.required']}
+                            />
+                        </Grid>
+                        <Grid item md={4} sm={6} xs={12}>
+                            <TextValidator
+                                label={'Coach name'}
+                                className='w-100'
+                                type="text"
+                                name="coachName"
+                                value={dataState?.coachName}
+                                onChange={(event) => handleSetData( event.target.value, "coachName")}
+                                validators={['required']}
+                                errorMessages={['general.required']}
+                            />
+                        </Grid>
+                        <Grid item md={4} sm={6} xs={12}>
+                            <TextValidator
+                                label={'Country'}
+                                className='w-100'
+                                type="text"
+                                name="country"
+                                value={dataState?.country}
+                                onChange={(event) => handleSetData( event.target.value, "country")}
+                                validators={['required']}
+                                errorMessages={['general.required']}
                             />
                         </Grid>
                     </Grid>

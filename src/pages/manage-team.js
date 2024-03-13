@@ -14,7 +14,12 @@ import { applyPagination } from 'src/utils/apply-pagination';
 import { ManagePlayerTable } from 'src/view/ManagePlayer/ManagePlayerTable';
 import Tooltip from '@material-ui/core/Tooltip';
 import { withStyles } from '@material-ui/core/styles';
-import ManagePlayerDialog from 'src/view/ManagePlayer/ManagePlayerDialog';
+import { deleteTeam, getAllTeam } from 'src/view/ManageTeam/ManageTeamServices';
+import { CODE } from 'src/AppConst';
+import ManageTeamDialog from 'src/view/ManageTeam/ManageTeamDialog';
+import ConfirmDialog from 'src/view/Dialog/ConfirmDialog';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const LightTooltip = withStyles((theme) => ({
   tooltip: {
@@ -54,34 +59,56 @@ const Page = () => {
   const [item, setItem] = useState(null);
 
   const [open, setOpen] = useState(false);
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   
   const handleClickOpen = () => {
     setOpen(true);
   };
+
   const handleClose = () => {
     setOpen(false);
+    setOpenDeleteDialog(false);
+    setItem(null);
   };
 
   const handleEdit = (data) => {
     setOpen(true);
     setItem(data)
   }
-  const handleDelete = (id) => {
 
+  const handleDelete = (id) => {
+    setItem(id);
+    setOpenDeleteDialog(true);
+  }
+
+  const handleYesDelete = async () => {
+    try {
+      const data = await deleteTeam(item?.idplayer);
+      toast.success("Delete team success");
+      updatePageData();
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  const updatePageData = async () => {
+    try {
+      const data = await getAllTeam();
+      if(data.status === CODE.SUCCESS) {
+        setListItem(data?.data);
+      }
+    } catch (error){
+      console.error(error);
+    }
   }
 
   useEffect(() => {
-    //fake data
-    setListItem([
-      { name: 'Mehmet', surname: 'Baran', birthYear: 1987, birthCity: 63 },
-      { name: 'Zerya Betül', surname: 'Baran', birthYear: 2017, birthCity: 34 },
-    ])
+    updatePageData();
   }, []);
-
 
   const columns=[
     {
-      title: 'Thao tác', 
+      title: 'Action', 
       field: '',
       maxWidth: 100,
       minWidth: 100,
@@ -102,20 +129,16 @@ const Page = () => {
       )
     },
     { 
-      title: 'Name', 
-      field: 'name',
+      title: 'Team name', 
+      field: 'teamName',
     },
     { 
-      title: 'Surname', 
-      field: 'surname' },
+      title: 'Country', 
+      field: 'country' },
     { 
-      title: 'Birth Year', 
-      field: 'birthYear',
-    }, 
-    {
-      title: 'Birth Place',
-      field: 'birthCity',
-    },
+      title: 'CoachName', 
+      field: 'coachName',
+    }
   ];
 
   return (
@@ -167,12 +190,20 @@ const Page = () => {
         </Container>
       </Box>
       <div>
-        <ManagePlayerDialog
+        {open && <ManageTeamDialog
           open={open}
-          handleClose={handleClose}
           item={item}
-        />
+          handleClose={handleClose}
+          updatePageData={updatePageData}
+        />}
+        {openDeleteDialog && <ConfirmDialog
+          open={openDeleteDialog}
+          text={"Confirm delete this team"}
+          handleClose={handleClose}
+          handleOk={handleYesDelete}
+        />}
       </div>
+      <ToastContainer autoClose={1000}/>
     </>
   );
 };
