@@ -83,7 +83,7 @@ const Page = () => {
 
   const handleYesDelete = async () => {
     try {
-      const data = await deleteTeam(item?.idplayer);
+      const data = await deleteTeam(item);
       toast.success("Delete team success");
       updatePageData();
     } catch (error) {

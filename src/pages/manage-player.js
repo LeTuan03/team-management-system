@@ -84,7 +84,7 @@ const Page = () => {
 
   const handleYesDelete = async () => {
     try {
-      const data = await deletePlayer(item?.idplayer);
+      const data = await deletePlayer(item);
       toast.success("Delete player success");
       updatePageData();
     } catch (error) {

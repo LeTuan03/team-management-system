@@ -7,7 +7,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import { Autocomplete, Grid } from '@mui/material';
+import { Autocomplete, Avatar, Grid, TextField } from '@mui/material';
 import { TextValidator, ValidatorForm } from 'react-material-ui-form-validator';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -17,6 +17,7 @@ import { convertDate, filterOptions } from 'src/AppFunction';
 import { updatePlayer } from './ManagePlayerServices';
 import { getAllTeam } from '../ManageTeam/ManageTeamServices';
 import { toast } from 'react-toastify';
+import { Box } from '@mui/system';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialogContent-root': {
@@ -37,6 +38,8 @@ export default function ManagePlayerDialog(props) {
     
     const [dataState, setDataState] = React.useState({});
     const [listTeam, setListTeam] = React.useState([]);
+    const [updatedImage, setUpdatedImage] = React.useState("");
+    const [imageData, setImageData] = React.useState(null);
     const validateSubmit = () => {
         return true;
     }
@@ -59,6 +62,18 @@ export default function ManagePlayerDialog(props) {
         setDataState((pre) => ({...pre, [name]: value}));
     }
 
+    const handleImageChange = (e) => {
+        const newImage = e.target.files[0];
+        if (newImage) {
+          setUpdatedImage(newImage); 
+          const reader = new FileReader();
+          reader.onload = () => {
+            setImageData(reader.result); 
+          };
+          reader.readAsDataURL(newImage);
+        }
+    };
+
     const getListTeam = async () => {
         try {
             const data = await getAllTeam();
@@ -69,6 +84,7 @@ export default function ManagePlayerDialog(props) {
             
         } 
     }
+    
     React.useEffect(() => {
         setDataState({
             ...item,
@@ -93,8 +109,23 @@ export default function ManagePlayerDialog(props) {
                     Add new/Update players
                 </DialogTitle>
                 <DialogContent dividers>
-                    <Grid container spacing={2}>
-                        
+                    <Grid container justifyContent={"center"} textAlign={"center"} spacing={2} sx={{ mb: 4, mt: 1}}>
+                        <Box>
+                            <Avatar
+                                style={{ width: 150, height: 150 }}
+                                sizes="large"
+                                variant="rounded"
+                                src={imageData}
+                            />
+                            <TextField 
+                                type="file" 
+                                id="avataImage"
+                                accept="image/*" 
+                                style={{display: "none"}}
+                                onChange={handleImageChange}
+                            />
+                            <Button variant="contained" size='small' sx={{ mt:2 }}><label for="avataImage">Upload image</label></Button>
+                        </Box>
                     </Grid>
                     <Grid container spacing={2}>
                         <Grid item md={4} sm={6} xs={12}>

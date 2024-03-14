@@ -88,24 +88,24 @@ export default function ManageTeamDialog(props) {
                         </Grid>
                         <Grid item md={4} sm={6} xs={12}>
                             <TextValidator
-                                label={'Coach name'}
-                                className='w-100'
-                                type="text"
-                                name="coachName"
-                                value={dataState?.coachName}
-                                onChange={(event) => handleSetData( event.target.value, "coachName")}
-                                validators={['required']}
-                                errorMessages={['general.required']}
-                            />
-                        </Grid>
-                        <Grid item md={4} sm={6} xs={12}>
-                            <TextValidator
                                 label={'Country'}
                                 className='w-100'
                                 type="text"
                                 name="country"
                                 value={dataState?.country}
                                 onChange={(event) => handleSetData( event.target.value, "country")}
+                                validators={['required']}
+                                errorMessages={['general.required']}
+                            />
+                        </Grid>
+                        <Grid item md={4} sm={6} xs={12}>
+                            <TextValidator
+                                label={'Coach name'}
+                                className='w-100'
+                                type="text"
+                                name="coachName"
+                                value={dataState?.coachName}
+                                onChange={(event) => handleSetData( event.target.value, "coachName")}
                                 validators={['required']}
                                 errorMessages={['general.required']}
                             />
