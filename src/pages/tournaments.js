@@ -7,6 +7,7 @@ import PencilIcon from "@heroicons/react/24/solid/PencilIcon";
 import TrashIcon from "@heroicons/react/24/solid/TrashIcon";
 import PlusIcon from "@heroicons/react/24/solid/PlusIcon";
 import {
+  Avatar,
   Box,
   Button,
   Container,
@@ -16,19 +17,17 @@ import {
   SvgIcon,
   Typography,
 } from "@mui/material";
-import { useSelection } from "src/hooks/use-selection";
 import { Layout as DashboardLayout } from "src/layouts/dashboard/layout";
-import { CustomersSearch } from "src/sections/customer/customers-search";
-import { applyPagination } from "src/utils/apply-pagination";
-import { ManagePlayerTable } from "src/view/ManagePlayer/ManagePlayerTable";
 import Tooltip from "@material-ui/core/Tooltip";
 import { withStyles } from "@material-ui/core/styles";
-import { deleteTeam, getAllTeam } from "src/view/ManageTeam/ManageTeamServices";
-import { CODE } from "src/AppConst";
-import ManageTeamDialog from "src/view/ManageTeam/ManageTeamDialog";
 import ConfirmDialog from "src/view/Dialog/ConfirmDialog";
+import { CODE } from "src/AppConst";
+import { format } from "date-fns";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { TournamentsTable } from "src/view/Tournaments/TournamentsTable";
+import TournamentsDialog from "src/view/Tournaments/TournamentsDialog";
+import { deleteTournaments, getAllTournaments } from "src/view/Tournaments/TournamentsServices";
 
 const LightTooltip = withStyles((theme) => ({
   tooltip: {
@@ -107,8 +106,8 @@ const Page = () => {
 
   const handleYesDelete = async () => {
     try {
-      const data = await deleteTeam(item);
-      toast.success("Delete team success");
+      const data = await deleteTournaments(item);
+      toast.success("Delete tournament success");
       updatePageData();
       handleClose();
     } catch (error) {
@@ -118,7 +117,7 @@ const Page = () => {
 
   const updatePageData = async () => {
     try {
-      const data = await getAllTeam();
+      const data = await getAllTournaments();
       if (data.status === CODE.SUCCESS) {
         setListItem(data?.data);
       }
@@ -145,32 +144,39 @@ const Page = () => {
             if (method === 0) {
               handleEdit(rowData);
             } else if (method === 1) {
-              handleDelete(rowData.idteam);
+              handleDelete(rowData?.IDTournaments);
             } else {
-              alert("Call Selected Here:" + rowData.idteam);
+              alert("Call Selected Here:" + rowData?.IDTournaments);
             }
           }}
         />
       ),
     },
     {
-      title: "Team name",
-      field: "teamName",
+      title: "Tournaments name",
+      field: "tournamentsName",
+      minWidth: 200,
     },
     {
-      title: "Country",
-      field: "country",
+      title: "Start date",
+      field: "startDate",
+      minWidth: 150,
+      align: "center",
+      render: (rowData) => rowData?.startDate && format(new Date(rowData?.startDate), "dd/MM/yyyy"),
     },
     {
-      title: "CoachName",
-      field: "coachName",
+      title: "End date",
+      field: "endDate",
+      minWidth: 150,
+      align: "center",
+      render: (rowData) => rowData?.endDate && format(new Date(rowData?.endDate), "dd/MM/yyyy"),
     },
   ];
 
   return (
     <>
       <Head>
-        <title>Team management | Team management system</title>
+        <title>Manage tournaments information | Team management system</title>
       </Head>
       <Box
         component="main"
@@ -183,7 +189,7 @@ const Page = () => {
           <Stack spacing={3}>
             <Stack direction="row" justifyContent="space-between" spacing={4}>
               <Stack spacing={1}>
-                <Typography variant="h4">List teams</Typography>
+                <Typography variant="h4">List tournaments</Typography>
               </Stack>
               <div>
                 <Button
@@ -199,14 +205,13 @@ const Page = () => {
                 </Button>
               </div>
             </Stack>
-            {/* <CustomersSearch /> */}
-            <ManagePlayerTable columns={columns} listItem={listItem} />
+            <TournamentsTable columns={columns} listItem={listItem} />
           </Stack>
         </Container>
       </Box>
       <div>
         {open && (
-          <ManageTeamDialog
+          <TournamentsDialog
             open={open}
             item={item}
             handleClose={handleClose}
@@ -216,7 +221,7 @@ const Page = () => {
         {openDeleteDialog && (
           <ConfirmDialog
             open={openDeleteDialog}
-            text={"Confirm delete this team"}
+            text={"Confirm delete this player"}
             handleClose={handleClose}
             handleOk={handleYesDelete}
           />

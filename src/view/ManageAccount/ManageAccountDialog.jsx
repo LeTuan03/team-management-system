@@ -11,21 +11,21 @@ import { Grid } from '@mui/material';
 import { TextValidator, ValidatorForm } from 'react-material-ui-form-validator';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
-  '& .MuiDialogContent-root': {
-    padding: theme.spacing(2),
-  },
-  '& .MuiDialogActions-root': {
-    padding: theme.spacing(1),
-  },
+    '& .MuiDialogContent-root': {
+        padding: theme.spacing(2),
+    },
+    '& .MuiDialogActions-root': {
+        padding: theme.spacing(1),
+    },
 }));
 
 export default function ManageAccountDialog(props) {
     let {
-        open, 
+        open,
         handleClose,
         item
     } = props;
-    
+
     const handleSubmit = async () => {
 
     }
@@ -34,7 +34,7 @@ export default function ManageAccountDialog(props) {
         <BootstrapDialog
             maxWidth="lg"
             minWidth="lg"
-            width="lg" 
+            width="lg"
             onClose={handleClose}
             fullWidth
             open={open}
@@ -46,23 +46,23 @@ export default function ManageAccountDialog(props) {
                 <DialogContent dividers>
                     <Grid container>
                         <Grid item>
-                        <TextValidator
-                            label={'sssss'}
-                            type="text"
-                            name="name"
-                            validators={['required']}
-                            errorMessages={['general.required']}
+                            <TextValidator
+                                label={'sssss'}
+                                type="text"
+                                name="name"
+                                validators={['required']}
+                                errorMessages={['This field is required']}
                             />
                         </Grid>
                     </Grid>
                 </DialogContent>
                 <DialogActions>
-                <Button  variant="contained" onClick={handleClose} color="error">
-                    Hủy
-                </Button>
-                <Button  variant="contained" type="submit">
-                    Lưu
-                </Button>
+                    <Button variant="contained" onClick={handleClose} color="error">
+                        Hủy
+                    </Button>
+                    <Button variant="contained" type="submit">
+                        Lưu
+                    </Button>
                 </DialogActions>
             </ValidatorForm>
         </BootstrapDialog>

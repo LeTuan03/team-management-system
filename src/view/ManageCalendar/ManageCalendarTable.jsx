@@ -7,17 +7,17 @@ import { DeleteOutline, Edit, SaveAlt, FilterList, FirstPage, LastPage, ChevronL
 
 
 export const ManageCalendarTable = (props) => {
-  const { 
+  const {
     columns,
     listItem
   } = props;
 
   return (
-    <Card>
+    <Card style={{ padding: 0 }}>
       <MaterialTable
         title={''}
         columns={columns}
-        data={listItem}    
+        data={listItem}
         // localization={{
         //   body: {
         //     emptyDataSourceMessage: "Không có bán ghi nào.",
@@ -33,15 +33,15 @@ export const ManageCalendarTable = (props) => {
         //   } 
         // }}
         options={{
-            search: false,
-            padding: "dense",
-            sorting: false,
-            selection: false,
-            toolbar: false,
-            headerStyle: {
-              backgroundColor: "#6366f1",
-              color: "#fff",
-            },
+          // search: false,
+          // padding: "dense",
+          sorting: false,
+          selection: false,
+          toolbar: false,
+          headerStyle: {
+            backgroundColor: "#6366f1",
+            color: "#fff",
+          },
         }}
         icons={{
           FirstPage: FirstPage,

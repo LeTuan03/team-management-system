@@ -7,9 +7,10 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import { Grid } from '@mui/material';
+import { Autocomplete, Avatar, Grid, TextField } from '@mui/material';
 import { TextValidator, ValidatorForm } from 'react-material-ui-form-validator';
-import { addTeam, updateTeam } from './ManageTeamServices';
+import { convertDate } from 'src/AppFunction';
+import { addTournaments, updateTournaments } from './TournamentsServices';
 import { CODE } from 'src/AppConst';
 import { toast } from 'react-toastify';
 
@@ -22,7 +23,7 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     },
 }));
 
-export default function ManageTeamDialog(props) {
+export default function TournamentsDialog(props) {
     let {
         open,
         handleClose,
@@ -31,35 +32,37 @@ export default function ManageTeamDialog(props) {
     } = props;
 
     const [dataState, setDataState] = React.useState({});
+
     const validateSubmit = () => {
         return true;
     }
     const convertData = (value) => {
         return {
-            teamName: value?.teamName,
-            coachName: value?.coachName,
-            country: value?.country,
-            idteam: value?.idteam,
+            tournamentsName: value?.tournamentsName,
+            startDate: value?.startDate,
+            endDate: value?.endDate,
+            IDTournaments: value?.IDTournaments,
         }
     }
+
     const handleSubmit = async () => {
         try {
             if (!validateSubmit()) return;
-            if (item?.idteam) {
-                const data = await updateTeam(convertData({ ...dataState }));
+            if (item?.IDTournaments) {
+                const data = await updateTournaments(convertData({ ...dataState }));
                 if (data?.status === CODE.SUCCESS) {
-                    toast.success("Update team success");
+                    toast.success("Update tournament success");
                 }
             } else {
-                const data = await addTeam({ ...dataState });
+                const data = await addTournaments({ ...dataState });
                 if (data?.status === CODE.SUCCESS) {
-                    toast.success("Add team success");
+                    toast.success("Add tournament success");
                 }
             }
             handleClose();
             updatePageData();
         } catch (error) {
-            console.error(error);
+            console.log(error)
         }
     }
 
@@ -67,9 +70,13 @@ export default function ManageTeamDialog(props) {
         setDataState((pre) => ({ ...pre, [name]: value }));
     }
 
+
+
     React.useEffect(() => {
         setDataState({
-            ...item
+            ...item,
+            startDate: convertDate(item?.startDate),
+            endDate: convertDate(item?.endDate),
         });
     }, []);
 
@@ -84,44 +91,40 @@ export default function ManageTeamDialog(props) {
         >
             <ValidatorForm onSubmit={handleSubmit}>
                 <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
-                    Add new/Update football team
+                    Add new/Update tournaments
                 </DialogTitle>
                 <DialogContent dividers>
                     <Grid container spacing={2}>
                         <Grid item md={4} sm={6} xs={12}>
                             <TextValidator
-                                label={'Team name'}
+                                label={'Tournaments name'}
                                 className='w-100'
                                 type="text"
-                                name="teamName"
-                                value={dataState?.teamName}
-                                onChange={(event) => handleSetData(event.target.value, "teamName")}
+                                name="tournamentsName"
+                                value={dataState?.tournamentsName}
+                                onChange={(event) => handleSetData(event.target.value, "tournamentsName")}
                                 validators={['required']}
                                 errorMessages={['This field is required']}
                             />
                         </Grid>
                         <Grid item md={4} sm={6} xs={12}>
                             <TextValidator
-                                label={'Country'}
+                                label={'Start date'}
                                 className='w-100'
-                                type="text"
-                                name="country"
-                                value={dataState?.country}
-                                onChange={(event) => handleSetData(event.target.value, "country")}
-                                validators={['required']}
-                                errorMessages={['This field is required']}
+                                type='date'
+                                name="startDate"
+                                value={dataState?.startDate}
+                                onChange={(event) => handleSetData(event.target.value, "startDate")}
                             />
                         </Grid>
                         <Grid item md={4} sm={6} xs={12}>
                             <TextValidator
-                                label={'Coach name'}
+                                label={'End date'}
                                 className='w-100'
-                                type="text"
-                                name="coachName"
-                                value={dataState?.coachName}
-                                onChange={(event) => handleSetData(event.target.value, "coachName")}
-                                validators={['required']}
-                                errorMessages={['This field is required']}
+                                type='date'
+                                name="endDate"
+                                value={dataState?.endDate}
+                                onChange={(event) => handleSetData(event.target.value, "endDate")}
                             />
                         </Grid>
                     </Grid>

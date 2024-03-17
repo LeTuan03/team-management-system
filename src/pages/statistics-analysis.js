@@ -3,12 +3,15 @@ import Head from 'next/head';
 import PencilIcon from '@heroicons/react/24/solid/PencilIcon';
 import TrashIcon from '@heroicons/react/24/solid/TrashIcon';
 import PlusIcon from '@heroicons/react/24/solid/PlusIcon';
-import { Box, Button, Container, Icon, IconButton, Stack, SvgIcon, Typography } from '@mui/material';
+import { Box, Button, Container, Icon, IconButton, Stack, SvgIcon, Tab, Tabs, Typography } from '@mui/material';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
 import Tooltip from '@material-ui/core/Tooltip';
 import { withStyles } from '@material-ui/core/styles';
 import { ManageCalendarTable } from 'src/view/ManageCalendar/ManageCalendarTable';
 import ManageCalendarDialog from 'src/view/ManageCalendar/ManageCalendarDialog';
+import { StatisticsAnalysisTable } from 'src/view/StatisticsAnalysis/StatisticsAnalysisTable';
+import { TabPanel } from '@mui/lab';
+import PropTypes from 'prop-types';
 
 const LightTooltip = withStyles((theme) => ({
   tooltip: {
@@ -42,12 +45,31 @@ function MaterialButton(props) {
   </div>;
 }
 
+TabPanel.propTypes = {
+  children: PropTypes.node,
+  index: PropTypes.number.isRequired,
+  value: PropTypes.number.isRequired,
+};
+
+function a11yProps(index) {
+  return {
+    id: `vertical-tab-${index}`,
+    'aria-controls': `vertical-tabpanel-${index}`,
+  };
+}
+
 const Page = () => {
 
   const [listItem, setListItem] = useState([]);
   const [item, setItem] = useState(null);
 
   const [open, setOpen] = useState(false);
+
+  const [tabValue, setTabValue] = useState(0);
+
+  const handleChangeTabValue = (event, newTabValue) => {
+    setTabValue(newTabValue);
+  };
   
   const handleClickOpen = () => {
     setOpen(true);
@@ -138,34 +160,53 @@ const Page = () => {
                   Statistics and analysis
                 </Typography>
               </Stack>
-              <div>
-                <Button
-                  startIcon={(
-                    <SvgIcon fontSize="small">
-                      <PlusIcon />
-                    </SvgIcon>
-                  )}
-                  onClick={handleClickOpen}
-                  variant="contained"
-                >
-                  Add
-                </Button>
-              </div>
             </Stack>
-            {/* <CustomersSearch /> */}
-            <ManageCalendarTable
-              columns={columns}
-              listItem={listItem}
-            />
+            <Tabs
+              value={tabValue}
+              onChange={handleChangeTabValue}
+              variant="scrollable"
+              scrollButtons="auto"
+              aria-label="scrollable auto tabs example"
+            >
+              <Tab sx={{ minWidth: 200 }} label="Performance statistics" {...a11yProps(0)} />
+              <Tab sx={{ minWidth: 200 }} label="Statistics of match results" {...a11yProps(1)}/>
+              <Tab sx={{ minWidth: 200 }} label="Charts rank" {...a11yProps(2)}/>
+            </Tabs>
+            <Box sx={{ mt: 4 }}>
+              {
+                tabValue === 0 && (
+                  <StatisticsAnalysisTable 
+                    columns={columns}
+                    listItem={listItem}
+                  />
+                )
+              }
+              {
+                tabValue === 1 && (
+                  <StatisticsAnalysisTable 
+                    columns={columns}
+                    listItem={listItem}
+                  />
+                )
+              }
+              {
+                tabValue === 2 && (
+                  <StatisticsAnalysisTable  
+                    columns={columns}
+                    listItem={listItem}
+                    />
+                )
+              }
+            </Box>
           </Stack>
         </Container>
       </Box>
       <div>
-        <ManageCalendarDialog
+        {/* <ManageCalendarDialog
           open={open}
           handleClose={handleClose}
           item={item}
-        />
+        /> */}
       </div>
     </>
   );

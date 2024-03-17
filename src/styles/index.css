@@ -4,3 +4,12 @@
 .mt-3 {
     margin-top: 3px;
 }
+.mt-10 {
+    margin-top: 10px;
+}
+.tabPalne {
+    margin-top: 20px;
+}
+.tabPalne div {
+    padding: 0;
+}
