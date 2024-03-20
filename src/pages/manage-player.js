@@ -180,7 +180,7 @@ const Page = () => {
         return (
           <Box sx={{ display: "flex", alignItems: "center" }}>
             <div>
-              <Avatar sx={{ mr: 1 }} />
+              <Avatar sx={{ mr: 1 }} src={rowData?.photo} />
             </div>
             <div>{rowData?.fullName}</div>
           </Box>
@@ -223,6 +223,34 @@ const Page = () => {
       minWidth: 200,
     },
     {
+      title: "Height",
+      field: "height",
+      minWidth: 100,
+      align: "center",
+    },
+    {
+      title: "Weight",
+      field: "weight",
+      minWidth: 100,
+      align: "center",
+    },
+    {
+      title: "Contract Start Date",
+      field: "contractStartDate",
+      minWidth: 190,
+      align: "center",
+      render: (rowData) =>
+        rowData?.contractStartDate && format(new Date(rowData?.contractStartDate), "dd/MM/yyyy"),
+    },
+    {
+      title: "Contract End Date",
+      field: "contractEndDate",
+      minWidth: 190,
+      align: "center",
+      render: (rowData) =>
+        rowData?.contractEndDate && format(new Date(rowData?.contractEndDate), "dd/MM/yyyy"),
+    },
+    {
       title: "Action",
       field: "",
       maxWidth: 100,
@@ -254,7 +282,7 @@ const Page = () => {
         component="main"
         sx={{
           flexGrow: 1,
-          py: 8,
+          py: 2,
         }}
       >
         <Container maxWidth="xl">

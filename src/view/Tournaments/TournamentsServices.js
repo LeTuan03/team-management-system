@@ -22,3 +22,8 @@ export const deleteTournaments = (id) => {
   let url = PATH + "/deleteTour/" + id;
   return axios.delete(url);
 };
+
+export const thongKeByTour = (id) => {
+  let url = PATH + "/thongke/" + id;
+  return axios.get(url);
+};

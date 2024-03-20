@@ -48,8 +48,10 @@ export default function ManageCalendarDialog(props) {
             AwayTeamID: value?.awayTeam?.idteam,
             MatchDate: value?.matchDate,
             status: value?.status?.name,
-            LoaiTranDau: value?.loaiTranDau?.name,
+            LoaiTranDau: value?.loaiTranDau?.name === OBJECT_TYPE_MATCH.Official.name ? 'chinh thuc' : value?.loaiTranDau?.name,
             IDTournament: value?.tournaments?.IDTournaments,
+            HomeTeamScore: value?.homeTeamScore,
+            AwayTeamScore: value?.awayTeamScore,
         }
     }
     const handleSubmit = async () => {
@@ -117,7 +119,7 @@ export default function ManageCalendarDialog(props) {
             case OBJECT_TYPE_MATCH.Official.name:
                 return OBJECT_TYPE_MATCH.Official
             default:
-                return OBJECT_TYPE_MATCH.Practice
+                return OBJECT_TYPE_MATCH.Official
         }
     }
 
@@ -290,6 +292,28 @@ export default function ManageCalendarDialog(props) {
                                 errorMessages={["This field is required"]}
                             />
                         </Grid>
+                        {item?.matchID && <>
+                            <Grid item md={4} sm={6} xs={12}>
+                                <TextValidator
+                                    className='w-100'
+                                    type='number'
+                                    label='Home team score'
+                                    name="homeTeamScore"
+                                    value={dataState?.homeTeamScore}
+                                    onChange={(event) => handleSetData(event.target.value, "homeTeamScore")}
+                                />
+                            </Grid>
+                            <Grid item md={4} sm={6} xs={12}>
+                                <TextValidator
+                                    className='w-100'
+                                    type='number'
+                                    label='Away team score'
+                                    name="awayTeamScore"
+                                    value={dataState?.awayTeamScore}
+                                    onChange={(event) => handleSetData(event.target.value, "awayTeamScore")}
+                                />
+                            </Grid>
+                        </>}
                         {/* <Grid item md={4} sm={6} xs={12}>
                             <TextValidator
                                 className='w-100'

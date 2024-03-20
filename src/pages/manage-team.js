@@ -133,6 +133,18 @@ const Page = () => {
 
   const columns = [
     {
+      title: "Team name",
+      field: "teamName",
+    },
+    {
+      title: "Country",
+      field: "country",
+    },
+    {
+      title: "CoachName",
+      field: "coachName",
+    },
+    {
       title: "Action",
       field: "",
       maxWidth: 100,
@@ -153,18 +165,6 @@ const Page = () => {
         />
       ),
     },
-    {
-      title: "Team name",
-      field: "teamName",
-    },
-    {
-      title: "Country",
-      field: "country",
-    },
-    {
-      title: "CoachName",
-      field: "coachName",
-    },
   ];
 
   return (
@@ -176,7 +176,7 @@ const Page = () => {
         component="main"
         sx={{
           flexGrow: 1,
-          py: 8,
+          py: 2
         }}
       >
         <Container maxWidth="xl">

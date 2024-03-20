@@ -14,7 +14,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { CODE, OBJECT_POSITION, POSITION, TYPE_MATCH } from 'src/AppConst';
 import { convertDate, filterOptions } from 'src/AppFunction';
-import { addPlayer, updatePlayer } from './ManagePlayerServices';
+import { addPlayer, updateImagePlayer, updatePlayer } from './ManagePlayerServices';
 import { getAllTeam } from '../ManageTeam/ManageTeamServices';
 import { toast } from 'react-toastify';
 import { Box } from '@mui/system';
@@ -43,6 +43,7 @@ export default function ManagePlayerDialog(props) {
     const validateSubmit = () => {
         return true;
     }
+
     const convertDto = (value) => {
         return {
             dateOfBirth: value?.dateOfBirth,
@@ -58,13 +59,31 @@ export default function ManagePlayerDialog(props) {
             phone: value?.phone,
             idteam: value?.team?.idteam,
             idplayer: value?.idplayer,
+            photo: value?.photo,
         }
     }
+
+    const handleUpload = async () => {
+        try {
+            if (updatedImage) {
+                let formData = new FormData();
+                formData.append('IDPlayer', item?.idplayer);
+                formData.append('avatar', updatedImage);
+                const data = await updateImagePlayer(formData);
+                return data;
+            }
+        } catch (error) {
+            console.log(error);
+            throw error; // Ném lỗi để xử lý ở hàm handleSubmit
+        }
+    }
+
     const handleSubmit = async () => {
         try {
             if (!validateSubmit()) return;
             if (item?.idplayer) {
                 const data = await updatePlayer(convertDto({ ...dataState }));
+                const uploadResult = await handleUpload();
                 if (data?.status === CODE.SUCCESS) {
                     toast.success("Update player success");
                 }
@@ -80,6 +99,7 @@ export default function ManagePlayerDialog(props) {
             console.error(error);
         }
     }
+
 
     const handleSetData = (value, name) => {
         setDataState((pre) => ({ ...pre, [name]: value }));
@@ -145,6 +165,7 @@ export default function ManagePlayerDialog(props) {
             contractEndDate: convertDate(item?.contractEndDate),
             position: getPosition(item?.position)
         });
+        setImageData(item?.photo)
         getListTeam();
     }, []);
 

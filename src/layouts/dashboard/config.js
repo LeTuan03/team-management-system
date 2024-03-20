@@ -10,6 +10,7 @@ import CalendarIcon from "@heroicons/react/24/solid/CalendarIcon";
 import XCircleIcon from "@heroicons/react/24/solid/XCircleIcon";
 import ChartBarSquareIcon from "@heroicons/react/24/solid/ChartBarSquareIcon";
 import CreditCardIcon from "@heroicons/react/24/solid/CreditCardIcon";
+import GlobeEuropeAfricaIcon from "@heroicons/react/24/solid/GlobeEuropeAfricaIcon";
 import { SvgIcon } from "@mui/material";
 
 export const items = [
@@ -54,19 +55,19 @@ export const items = [
     path: "/tournaments",
     icon: (
       <SvgIcon fontSize="small">
-        <ChartBarSquareIcon />
+        <GlobeEuropeAfricaIcon />
       </SvgIcon>
     ),
   },
-  {
-    title: "Statistics and analysis",
-    path: "/statistics-analysis",
-    icon: (
-      <SvgIcon fontSize="small">
-        <ChartBarSquareIcon />
-      </SvgIcon>
-    ),
-  },
+  // {
+  //   title: "Statistics and analysis",
+  //   path: "/statistics-analysis",
+  //   icon: (
+  //     <SvgIcon fontSize="small">
+  //       <ChartBarSquareIcon />
+  //     </SvgIcon>
+  //   ),
+  // },
   {
     title: "Account management",
     path: "/manage-account",

@@ -24,15 +24,14 @@ import { withStyles } from "@material-ui/core/styles";
 import { ManageCalendarTable } from "src/view/ManageCalendar/ManageCalendarTable";
 import ManageCalendarDialog from "src/view/ManageCalendar/ManageCalendarDialog";
 import { deleteMatch, getAllMatch } from "src/view/ManageCalendar/ManageCalendarServices";
-import { CODE, OBJECT_TYPE_MATCH } from "src/AppConst";
+import { CODE, OBJECT_STATUS_MATCH, OBJECT_TYPE_MATCH } from "src/AppConst";
 import { format } from "date-fns";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import PropTypes from "prop-types";
-import { getAllPlayer } from "src/view/ManagePlayer/ManagePlayerServices";
+import DialogGoalPlayerInfo from "src/view/ManageCalendar/DialogGoalPlayerInfo";
 import ConfirmDialog from "src/view/Dialog/ConfirmDialog";
 import DialogPlayerInfo from "src/view/ManageCalendar/DialogPlayerInfo";
-import DialogGoalPlayerInfo from "src/view/ManageCalendar/DialogGoalPlayerInfo";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const LightTooltip = withStyles((theme) => ({
   tooltip: {
@@ -89,7 +88,7 @@ function MaterialButton(props) {
           </Icon>
         </IconButton>
       </LightTooltip>
-      <LightTooltip
+      {item?.status !== OBJECT_STATUS_MATCH.Finished.name && <LightTooltip
         title={"Xóa"}
         placement="right-end"
         enterDelay={300}
@@ -103,7 +102,7 @@ function MaterialButton(props) {
             <TrashIcon />
           </Icon>
         </IconButton>
-      </LightTooltip>
+      </LightTooltip>}
       <LightTooltip
         title={"History"}
         placement="right-end"
@@ -213,7 +212,7 @@ const Page = () => {
         }
         if (value === 2) {
           listItemFilter = data?.data?.filter(
-            (i) => i?.loaiTranDau === OBJECT_TYPE_MATCH.Official.name
+            (i) => i?.loaiTranDau === OBJECT_TYPE_MATCH.Official.name || i?.loaiTranDau === "chinh thuc"
           );
         }
         setListItem(listItemFilter);
@@ -222,6 +221,19 @@ const Page = () => {
       console.error(error);
     }
   };
+
+  const getType = (value) => {
+    switch (value) {
+        case OBJECT_TYPE_MATCH.Practice.name:
+            return OBJECT_TYPE_MATCH.Practice.name
+        case OBJECT_TYPE_MATCH.Friendly.name:
+            return OBJECT_TYPE_MATCH.Friendly.name
+        case OBJECT_TYPE_MATCH.Official.name:
+            return OBJECT_TYPE_MATCH.Official.name
+        default:
+            return OBJECT_TYPE_MATCH.Official.name
+    }
+  }
 
   useEffect(() => {
     updatePageData();
@@ -274,6 +286,7 @@ const Page = () => {
       field: "loaiTranDau",
       minWidth: "250px",
       align: "center",
+      render: (rowData) => getType(rowData?.loaiTranDau)
     },
     {
       title: "Action",
@@ -311,7 +324,7 @@ const Page = () => {
         component="main"
         sx={{
           flexGrow: 1,
-          py: 8,
+          py: 2
         }}
       >
         <Container maxWidth="xl">
@@ -407,8 +420,8 @@ const Page = () => {
             handleOk={handleYesDelete}
           />
         )}
-        <ToastContainer autoClose={1000} />
       </div>
+      <ToastContainer autoClose={1000} />
     </>
   );
 };

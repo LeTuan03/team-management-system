@@ -16,9 +16,7 @@ import { getAllTeam } from '../ManageTeam/ManageTeamServices';
 import { addGoal, addMatch, updateMatch } from './ManageCalendarServices';
 import { getAllTournaments } from '../Tournaments/TournamentsServices';
 import { getAllPlayer } from '../ManagePlayer/ManagePlayerServices';
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-
+import { toast } from "react-toastify";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiDialogContent-root': {
@@ -244,7 +242,6 @@ export default function DialogGoalPlayerInfo(props) {
                     </Button>
                 </DialogActions>
             </ValidatorForm>
-            <ToastContainer autoClose={1000} />
         </BootstrapDialog>
     );
 }

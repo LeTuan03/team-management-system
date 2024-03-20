@@ -13,3 +13,10 @@
 .tabPalne div {
     padding: 0;
 }
+.banner-logo {
+    background-image: url(../../public/assets/logos/log.jpg);
+}
+
+.scale-4 {
+    scale: 4 !important;
+}

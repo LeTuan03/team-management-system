@@ -21,3 +21,8 @@ export const deletePlayer = (id) => {
   let url = PATH + "/deletePlayer/" + id;
   return axios.delete(url);
 };
+
+export const updateImagePlayer = (payload) => {
+  let url = PATH + "/updateImagePlayer";
+  return axios.post(url, payload);
+};

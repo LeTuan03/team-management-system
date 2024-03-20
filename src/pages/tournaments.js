@@ -132,6 +132,24 @@ const Page = () => {
 
   const columns = [
     {
+      title: "Tournaments name",
+      field: "tournamentsName",
+      minWidth: 200,
+    },
+    {
+      title: "Start date",
+      field: "startDate",
+      minWidth: 150,
+      align: "center",
+      render: (rowData) => rowData?.startDate && format(new Date(rowData?.startDate), "dd/MM/yyyy"),
+    },
+    {
+      title: "End date",
+      field: "endDate",
+      minWidth: 150,
+      align: "center",
+      render: (rowData) => rowData?.endDate && format(new Date(rowData?.endDate), "dd/MM/yyyy"),
+    }, {
       title: "Action",
       field: "",
       maxWidth: 100,
@@ -152,25 +170,6 @@ const Page = () => {
         />
       ),
     },
-    {
-      title: "Tournaments name",
-      field: "tournamentsName",
-      minWidth: 200,
-    },
-    {
-      title: "Start date",
-      field: "startDate",
-      minWidth: 150,
-      align: "center",
-      render: (rowData) => rowData?.startDate && format(new Date(rowData?.startDate), "dd/MM/yyyy"),
-    },
-    {
-      title: "End date",
-      field: "endDate",
-      minWidth: 150,
-      align: "center",
-      render: (rowData) => rowData?.endDate && format(new Date(rowData?.endDate), "dd/MM/yyyy"),
-    },
   ];
 
   return (
@@ -182,7 +181,7 @@ const Page = () => {
         component="main"
         sx={{
           flexGrow: 1,
-          py: 8,
+          py: 2
         }}
       >
         <Container maxWidth="xl">

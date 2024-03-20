@@ -7,7 +7,7 @@ import { DeleteOutline, Edit, SaveAlt, FilterList, FirstPage, LastPage, ChevronL
 
 
 export const ManageTeamTable = (props) => {
-  const { 
+  const {
     columns,
     listItem
   } = props;
@@ -17,31 +17,31 @@ export const ManageTeamTable = (props) => {
       <MaterialTable
         title={''}
         columns={columns}
-        data={listItem}    
-        localization={{
-          body: {
-            emptyDataSourceMessage: "Không có bán ghi nào.",
-          },
-          pagination: {
-            labelDisplayedRows: "{from}-{to} trong {count}",
-            firstTooltip: "Trang đầu",
-            previousTooltip: "Trang trước",
-            nextTooltip: "Trang tiếp",
-            lastTooltip: "Trang cuối",
-            labelRowsSelect: "hàng mỗi trang",
-            labelRowsPerPage: ''
-          } 
-        }}
+        data={listItem}
+        // localization={{
+        //   body: {
+        //     emptyDataSourceMessage: "Không có bán ghi nào.",
+        //   },
+        //   pagination: {
+        //     labelDisplayedRows: "{from}-{to} trong {count}",
+        //     firstTooltip: "Trang đầu",
+        //     previousTooltip: "Trang trước",
+        //     nextTooltip: "Trang tiếp",
+        //     lastTooltip: "Trang cuối",
+        //     labelRowsSelect: "hàng mỗi trang",
+        //     labelRowsPerPage: ''
+        //   } 
+        // }}
         options={{
-            search: false,
-            padding: "dense",
-            sorting: false,
-            selection: false,
-            toolbar: false,
-            headerStyle: {
-              backgroundColor: "#6366f1",
-              color: "#fff",
-            },
+          search: false,
+          padding: "dense",
+          sorting: false,
+          selection: false,
+          toolbar: false,
+          headerStyle: {
+            backgroundColor: "#6366f1",
+            color: "#fff",
+          },
         }}
         icons={{
           FirstPage: FirstPage,

@@ -31,3 +31,8 @@ export const addGoal = (payload) => {
   let url = PATH + "/insertGoals";
   return axios.post(url, payload);
 };
+
+export const getTopScorers = () => {
+  let url = PATH + "/top-scorers";
+  return axios.get(url);
+};

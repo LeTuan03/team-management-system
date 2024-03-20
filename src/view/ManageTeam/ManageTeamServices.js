@@ -21,3 +21,13 @@ export const deleteTeam = (id) => {
   let url = PATH + "/deleteTeam/" + id;
   return axios.delete(url);
 };
+
+export const getRankingTeam = () => {
+  let url = PATH + "/bxh";
+  return axios.get(url);
+};
+
+export const getPlayerByIDTeam = (id) => {
+  let url = PATH + "/getPlayerByIDTeam/" + id;
+  return axios.get(url);
+};

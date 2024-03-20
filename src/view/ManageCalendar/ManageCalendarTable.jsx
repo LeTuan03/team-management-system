@@ -5,7 +5,6 @@ import {
 import MaterialTable from 'material-table';
 import { DeleteOutline, Edit, SaveAlt, FilterList, FirstPage, LastPage, ChevronLeft, ChevronRight, Save } from '@material-ui/icons';
 
-
 export const ManageCalendarTable = (props) => {
   const {
     columns,
