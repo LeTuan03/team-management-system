@@ -19,7 +19,7 @@ export const Layout = (props) => {
       <Grid container sx={{ flex: "1 1 auto" }}>
         <Grid
           xs={12}
-          lg={6}
+          lg={12}
           sx={{
             backgroundColor: "background.paper",
             display: "flex",
@@ -52,7 +52,7 @@ export const Layout = (props) => {
           </Box>
           {children}
         </Grid>
-        <Grid
+        {/* <Grid
           xs={12}
           lg={6}
           sx={{
@@ -78,16 +78,12 @@ export const Layout = (props) => {
               variant="h1"
             >
               <Box component="a" sx={{ color: "#15B79E" }} target="_blank">
-                Team management system
+                Football management system
               </Box>
             </Typography>
             <Typography align="center" sx={{ mb: 3 }} variant="subtitle1"></Typography>
-            {/* <img
-              alt=""
-              src="/assets/auth-illustration.svg"
-            /> */}
           </Box>
-        </Grid>
+        </Grid> */}
       </Grid>
     </Box>
   );

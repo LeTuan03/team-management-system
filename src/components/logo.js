@@ -1,9 +1,17 @@
 import { useTheme } from "@mui/material/styles";
+import { useEffect, useState } from "react";
 
 export const Logo = () => {
   const theme = useTheme();
+  const [isLoginPage, setIsLoginPage] = useState(false);
   const fillColor = theme.palette.primary.main;
-
+  useEffect(() => {
+    if (window.location.pathname === "/auth/login") {
+      setIsLoginPage(true);
+    } else {
+      setIsLoginPage(false);
+    }
+  }, []);
   return (
     // <svg
     //   class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiSvgIcon-root MuiSvgIcon-fontSizeLarge css-18wq8ra"
@@ -20,9 +28,13 @@ export const Logo = () => {
     //   ></path>
     // </svg>
 
-    <img
-      className="scale-4"
-      src="https://png.pngtree.com/png-clipart/20231214/ourmid/pngtree-world-cup-black-and-white-cartoon-football-banner-border-png-image_11332813.png"
-    />
+    <>
+      {!isLoginPage && (
+        <img
+          className="scale-4"
+          src="https://png.pngtree.com/png-clipart/20231214/ourmid/pngtree-world-cup-black-and-white-cartoon-football-banner-border-png-image_11332813.png"
+        />
+      )}
+    </>
   );
 };

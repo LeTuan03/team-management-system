@@ -18,6 +18,7 @@ import { addPlayer, updateImagePlayer, updatePlayer } from './ManagePlayerServic
 import { getAllTeam } from '../ManageTeam/ManageTeamServices';
 import { toast } from 'react-toastify';
 import { Box } from '@mui/system';
+import { LoadingButton } from '@mui/lab';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiDialogContent-root': {
@@ -40,6 +41,7 @@ export default function ManagePlayerDialog(props) {
     const [listTeam, setListTeam] = React.useState([]);
     const [updatedImage, setUpdatedImage] = React.useState("");
     const [imageData, setImageData] = React.useState(null);
+    const [loading, setLoading] = React.useState(false);
     const validateSubmit = () => {
         return true;
     }
@@ -79,6 +81,7 @@ export default function ManagePlayerDialog(props) {
     }
 
     const handleSubmit = async () => {
+        setLoading(true)
         try {
             if (!validateSubmit()) return;
             if (item?.idplayer) {
@@ -97,6 +100,8 @@ export default function ManagePlayerDialog(props) {
             updatePageData();
         } catch (error) {
             console.error(error);
+        } finally {
+            setLoading(false)
         }
     }
 
@@ -365,9 +370,9 @@ export default function ManagePlayerDialog(props) {
                     <Button variant="contained" onClick={handleClose} color="error">
                         Cancel
                     </Button>
-                    <Button variant="contained" type="submit">
+                    <LoadingButton variant="contained" type="submit" loading={loading}>
                         Save
-                    </Button>
+                    </LoadingButton>
                 </DialogActions>
             </ValidatorForm>
         </BootstrapDialog>

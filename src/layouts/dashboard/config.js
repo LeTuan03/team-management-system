@@ -12,123 +12,63 @@ import ChartBarSquareIcon from "@heroicons/react/24/solid/ChartBarSquareIcon";
 import CreditCardIcon from "@heroicons/react/24/solid/CreditCardIcon";
 import GlobeEuropeAfricaIcon from "@heroicons/react/24/solid/GlobeEuropeAfricaIcon";
 import { SvgIcon } from "@mui/material";
+import { useAuth } from "src/hooks/use-auth";
+import { OBJECT_ROLE } from "src/AppConst";
 
-export const items = [
-  {
-    title: "Overview",
-    path: "/",
-    icon: (
-      <SvgIcon fontSize="small">
-        <ChartBarIcon />
-      </SvgIcon>
-    ),
-  },
-  {
-    title: "Manage player information",
-    path: "/manage-player",
-    icon: (
-      <SvgIcon fontSize="small">
-        <UsersIcon />
-      </SvgIcon>
-    ),
-  },
-  {
-    title: "Team management",
-    path: "/manage-team",
-    icon: (
-      <SvgIcon fontSize="small">
-        <UserGroupIcon />
-      </SvgIcon>
-    ),
-  },
-  {
-    title: "Schedule and matches",
-    path: "/manage-calendar",
-    icon: (
-      <SvgIcon fontSize="small">
-        <CalendarIcon />
-      </SvgIcon>
-    ),
-  },
-  {
-    title: "Tournaments",
-    path: "/tournaments",
-    icon: (
-      <SvgIcon fontSize="small">
-        <GlobeEuropeAfricaIcon />
-      </SvgIcon>
-    ),
-  },
-  // {
-  //   title: "Statistics and analysis",
-  //   path: "/statistics-analysis",
-  //   icon: (
-  //     <SvgIcon fontSize="small">
-  //       <ChartBarSquareIcon />
-  //     </SvgIcon>
-  //   ),
-  // },
-  {
-    title: "Account management",
-    path: "/manage-account",
-    icon: (
-      <SvgIcon fontSize="small">
-        <CreditCardIcon />
-      </SvgIcon>
-    ),
-  },
-  // {
-  //   title: 'Companies',
-  //   path: '/companies',
-  //   icon: (
-  //     <SvgIcon fontSize="small">
-  //       <ShoppingBagIcon />
-  //     </SvgIcon>
-  //   )
-  // },
-  // {
-  //   title: 'Account',
-  //   path: '/account',
-  //   icon: (
-  //     <SvgIcon fontSize="small">
-  //       <UserIcon />
-  //     </SvgIcon>
-  //   )
-  // },
-  // {
-  //   title: 'Settings',
-  //   path: '/settings',
-  //   icon: (
-  //     <SvgIcon fontSize="small">
-  //       <CogIcon />
-  //     </SvgIcon>
-  //   )
-  // },
-  {
-    title: "Log out",
-    path: "/auth/login",
-    icon: (
-      <SvgIcon fontSize="small">
-        <LockClosedIcon />
-      </SvgIcon>
-    ),
-  },
-  // {
-  //   title: 'Register',
-  //   path: '/auth/register',
-  //   icon: (
-  //     <SvgIcon fontSize="small">
-  //       <UserPlusIcon />
-  //     </SvgIcon>
-  //   )
-  // },
-  // {
-  //   title: 'Error',
-  //   path: '/404',
-  //   icon: (
-  //     <SvgIcon fontSize="small">
-  //       <XCircleIcon />
-  //     </SvgIcon>
-  //   )
-  // }
-];
+export const items = () => {
+  const auth = useAuth();
+  let { user } = auth;
+
+  let isCoach = user?.role === OBJECT_ROLE.Coach.name;
+  let isAssistant = user?.role === OBJECT_ROLE.Assistant.name;
+
+  const roleBasedItems = [
+    {
+      title: "Overview",
+      path: "/",
+      icon: (
+        <SvgIcon fontSize="small">
+          <ChartBarIcon />
+        </SvgIcon>
+      ),
+    },
+    {
+      title: "Manage player information",
+      path: "/manage-player",
+      icon: (
+        <SvgIcon fontSize="small">
+          <UsersIcon />
+        </SvgIcon>
+      ),
+    },
+    isCoach && {
+      title: "Team management",
+      path: "/manage-team",
+      icon: (
+        <SvgIcon fontSize="small">
+          <UserGroupIcon />
+        </SvgIcon>
+      ),
+    },
+    {
+      title: "Schedule and matches",
+      path: "/manage-calendar",
+      icon: (
+        <SvgIcon fontSize="small">
+          <CalendarIcon />
+        </SvgIcon>
+      ),
+    },
+    isCoach && {
+      title: "Tournaments",
+      path: "/tournaments",
+      icon: (
+        <SvgIcon fontSize="small">
+          <GlobeEuropeAfricaIcon />
+        </SvgIcon>
+      ),
+    },
+  ];
+
+  return roleBasedItems.filter(Boolean);
+};

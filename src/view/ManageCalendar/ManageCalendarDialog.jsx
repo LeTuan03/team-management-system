@@ -48,7 +48,7 @@ export default function ManageCalendarDialog(props) {
             AwayTeamID: value?.awayTeam?.idteam,
             MatchDate: value?.matchDate,
             status: value?.status?.name,
-            LoaiTranDau: value?.loaiTranDau?.name === OBJECT_TYPE_MATCH.Official.name ? 'chinh thuc' : value?.loaiTranDau?.name,
+            LoaiTranDau: value?.loaiTranDau?.name === OBJECT_TYPE_MATCH.Official.name ? 'chinhthuc' : value?.loaiTranDau?.name,
             IDTournament: value?.tournaments?.IDTournaments,
             HomeTeamScore: value?.homeTeamScore,
             AwayTeamScore: value?.awayTeamScore,

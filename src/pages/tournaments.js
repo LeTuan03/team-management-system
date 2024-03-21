@@ -149,7 +149,8 @@ const Page = () => {
       minWidth: 150,
       align: "center",
       render: (rowData) => rowData?.endDate && format(new Date(rowData?.endDate), "dd/MM/yyyy"),
-    }, {
+    },
+    {
       title: "Action",
       field: "",
       maxWidth: 100,
@@ -175,13 +176,13 @@ const Page = () => {
   return (
     <>
       <Head>
-        <title>Manage tournaments information | Team management system</title>
+        <title>Manage tournaments information | Football management system</title>
       </Head>
       <Box
         component="main"
         sx={{
           flexGrow: 1,
-          py: 2
+          py: 2,
         }}
       >
         <Container maxWidth="xl">

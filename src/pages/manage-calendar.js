@@ -88,21 +88,23 @@ function MaterialButton(props) {
           </Icon>
         </IconButton>
       </LightTooltip>
-      {item?.status !== OBJECT_STATUS_MATCH.Finished.name && <LightTooltip
-        title={"Xóa"}
-        placement="right-end"
-        enterDelay={300}
-        leaveDelay={200}
-        PopperProps={{
-          popperOptions: { modifiers: { offset: { enabled: true, offset: "10px, 0px" } } },
-        }}
-      >
-        <IconButton size="small" onClick={() => props.onSelect(item, 1)}>
-          <Icon fontSize="small" color="error">
-            <TrashIcon />
-          </Icon>
-        </IconButton>
-      </LightTooltip>}
+      {item?.status !== OBJECT_STATUS_MATCH.Finished.name && (
+        <LightTooltip
+          title={"Xóa"}
+          placement="right-end"
+          enterDelay={300}
+          leaveDelay={200}
+          PopperProps={{
+            popperOptions: { modifiers: { offset: { enabled: true, offset: "10px, 0px" } } },
+          }}
+        >
+          <IconButton size="small" onClick={() => props.onSelect(item, 1)}>
+            <Icon fontSize="small" color="error">
+              <TrashIcon />
+            </Icon>
+          </IconButton>
+        </LightTooltip>
+      )}
       <LightTooltip
         title={"History"}
         placement="right-end"
@@ -212,7 +214,8 @@ const Page = () => {
         }
         if (value === 2) {
           listItemFilter = data?.data?.filter(
-            (i) => i?.loaiTranDau === OBJECT_TYPE_MATCH.Official.name || i?.loaiTranDau === "chinh thuc"
+            (i) =>
+              i?.loaiTranDau === OBJECT_TYPE_MATCH.Official.name || i?.loaiTranDau === "chinhthuc"
           );
         }
         setListItem(listItemFilter);
@@ -224,16 +227,16 @@ const Page = () => {
 
   const getType = (value) => {
     switch (value) {
-        case OBJECT_TYPE_MATCH.Practice.name:
-            return OBJECT_TYPE_MATCH.Practice.name
-        case OBJECT_TYPE_MATCH.Friendly.name:
-            return OBJECT_TYPE_MATCH.Friendly.name
-        case OBJECT_TYPE_MATCH.Official.name:
-            return OBJECT_TYPE_MATCH.Official.name
-        default:
-            return OBJECT_TYPE_MATCH.Official.name
+      case OBJECT_TYPE_MATCH.Practice.name:
+        return OBJECT_TYPE_MATCH.Practice.name;
+      case OBJECT_TYPE_MATCH.Friendly.name:
+        return OBJECT_TYPE_MATCH.Friendly.name;
+      case OBJECT_TYPE_MATCH.Official.name:
+        return OBJECT_TYPE_MATCH.Official.name;
+      default:
+        return OBJECT_TYPE_MATCH.Official.name;
     }
-  }
+  };
 
   useEffect(() => {
     updatePageData();
@@ -286,7 +289,7 @@ const Page = () => {
       field: "loaiTranDau",
       minWidth: "250px",
       align: "center",
-      render: (rowData) => getType(rowData?.loaiTranDau)
+      render: (rowData) => getType(rowData?.loaiTranDau),
     },
     {
       title: "Action",
@@ -318,13 +321,13 @@ const Page = () => {
   return (
     <>
       <Head>
-        <title>Caneldar Fight | Team management system</title>
+        <title>Caneldar Fight | Football management system</title>
       </Head>
       <Box
         component="main"
         sx={{
           flexGrow: 1,
-          py: 2
+          py: 2,
         }}
       >
         <Container maxWidth="xl">

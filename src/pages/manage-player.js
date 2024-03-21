@@ -276,7 +276,7 @@ const Page = () => {
   return (
     <>
       <Head>
-        <title>Manage player information | Team management system</title>
+        <title>Manage player information | Football management system</title>
       </Head>
       <Box
         component="main"

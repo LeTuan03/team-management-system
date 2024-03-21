@@ -54,3 +54,13 @@ export const OBJECT_POSITION = {
   Attacking: { code: 10, name: "Attacking midfielder" },
   Forward: { code: 11, name: "Forward" },
 };
+
+export const ROLE = [
+  { code: 1, name: "Coach" },
+  { code: 2, name: "Assistant coach" },
+];
+
+export const OBJECT_ROLE = {
+  Coach: { code: 1, name: "Coach" },
+  Assistant: { code: 2, name: "Assistant coach" },
+};

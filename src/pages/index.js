@@ -19,111 +19,85 @@ import { OverviewTeamRank } from "src/sections/overview/overview-team-rank";
 
 const now = new Date();
 
-const Page = () =>  {
-
+const Page = () => {
   const [dataState, setDataState] = useState({});
-    
+
   const convertDataScore = (value) => {
     return {
       id: value?.idplayer,
       image: value?.photo,
       name: value?.fullName,
-    }
-  }
+    };
+  };
 
   const getDetailReport = async () => {
     try {
-      
-    const numPlayer = await getAllPlayer();
-    const numMatch = await getAllMatch();
-    const numTeam = await getAllTeam();
-    const numTournament = await getAllTournaments();
-    const topScorers = await getTopScorers();
-    const ranking = await getRankingTeam();
+      const numPlayer = await getAllPlayer();
+      const numMatch = await getAllMatch();
+      const numTeam = await getAllTeam();
+      const numTournament = await getAllTournaments();
+      const topScorers = await getTopScorers();
+      const ranking = await getRankingTeam();
 
-    setDataState((pre) => (
-      {...pre,
-       numPlayer: numPlayer?.data?.length,
-       numMatch: numMatch?.data?.length,
-       numTeam: numTeam?.data?.length,
-       numTournament: numTournament?.data?.length,
-       topScorers: topScorers?.data?.map(i => {
-        return {
-          ...convertDataScore(i?.player),
-          goal: i?.goalsScored
-        }
-       }),
-       ranking: ranking?.data
-    }))
+      setDataState((pre) => ({
+        ...pre,
+        numPlayer: numPlayer?.data?.length,
+        numMatch: numMatch?.data?.length,
+        numTeam: numTeam?.data?.length,
+        numTournament: numTournament?.data?.length,
+        topScorers: topScorers?.data?.map((i) => {
+          return {
+            ...convertDataScore(i?.player),
+            goal: i?.goalsScored,
+          };
+        }),
+        ranking: ranking?.data,
+      }));
     } catch (error) {
-      console.log(error) 
+      console.log(error);
     }
-  }
+  };
 
   useEffect(() => {
     getDetailReport();
-  }, [])
-  return <>
-    <Head>
-      <title>Overview | Team management system</title>
-    </Head>
-    <Box
-      component="main"
-      sx={{
-        flexGrow: 1,
-        py: 8,
-      }}
-    >
-      <Container maxWidth="xl">
-        <Grid
-          container
-          spacing={3}
-        >
-          <Grid
-            xs={12}
-            sm={6}
-            lg={3}
-          >
-            <OverviewBudget
-              difference={12}
-              positive
-              sx={{ height: '100%' }}
-              value={dataState?.numTournament}
-            />
-          </Grid>
-          <Grid
-            xs={12}
-            sm={6}
-            lg={3}
-          >
-            <OverviewTotalCustomers
-              difference={16}
-              positive
-              sx={{ height: '100%' }}
-              value={dataState?.numPlayer}
-            />
-          </Grid>
-          <Grid
-            xs={12}
-            sm={6}
-            lg={3}
-          >
-            <OverviewTasksProgress
-              sx={{ height: '100%' }}
-              value={dataState?.numMatch}
-            />
-          </Grid>
-          <Grid
-            xs={12}
-            sm={6}
-            lg={3}
-          >
-            <OverviewTotalProfit
-              sx={{ height: '100%' }}
-              value={dataState?.numTeam}
-            />
-          </Grid>
-          {/* <Grid
+  }, []);
+  return (
+    <>
+      <Head>
+        <title>Overview | Football management system</title>
+      </Head>
+      <Box
+        component="main"
+        sx={{
+          flexGrow: 1,
+          py: 8,
+        }}
+      >
+        <Container maxWidth="xl">
+          <Grid container spacing={3}>
+            <Grid xs={12} sm={6} lg={3}>
+              <OverviewBudget
+                difference={12}
+                positive
+                sx={{ height: "100%" }}
+                value={dataState?.numTournament}
+              />
+            </Grid>
+            <Grid xs={12} sm={6} lg={3}>
+              <OverviewTotalCustomers
+                difference={16}
+                positive
+                sx={{ height: "100%" }}
+                value={dataState?.numPlayer}
+              />
+            </Grid>
+            <Grid xs={12} sm={6} lg={3}>
+              <OverviewTasksProgress sx={{ height: "100%" }} value={dataState?.numMatch} />
+            </Grid>
+            <Grid xs={12} sm={6} lg={3}>
+              <OverviewTotalProfit sx={{ height: "100%" }} value={dataState?.numTeam} />
+            </Grid>
+            {/* <Grid
             xs={12}
             lg={8}
           >
@@ -152,40 +126,29 @@ const Page = () =>  {
               sx={{ height: '100%' }}
             />
           </Grid> */}
-          
-          <Grid
-            xs={12}
-            md={12}
-            lg={12}
-          >
-            <OverviewLatestOrders sx={{ height: '100%', minHeight: 100 }} />
+
+            <Grid xs={12} md={12} lg={12}>
+              <OverviewLatestOrders sx={{ height: "100%", minHeight: 100 }} />
+            </Grid>
+            <Grid xs={12} md={12} lg={4}>
+              <OverviewLatestProducts
+                title={"Top score goals"}
+                products={dataState?.topScorers}
+                sx={{ height: "100%" }}
+              />
+            </Grid>
+            <Grid xs={12} md={12} lg={8}>
+              <OverviewTeamRank
+                title="Team rankings"
+                products={dataState?.ranking}
+                sx={{ height: "100%" }}
+              />
+            </Grid>
           </Grid>
-          <Grid
-            xs={12}
-            md={12}
-            lg={4}
-          >
-            <OverviewLatestProducts
-              title={"Top score goals"}
-              products={dataState?.topScorers}
-              sx={{ height: '100%' }}
-            />
-          </Grid>
-          <Grid
-            xs={12}
-            md={12}
-            lg={8}
-          >
-            <OverviewTeamRank
-              title="Team rankings"
-              products={dataState?.ranking}
-              sx={{ height: '100%' }}
-            />
-          </Grid>
-        </Grid>
-      </Container>
-    </Box>
-  </>
+        </Container>
+      </Box>
+    </>
+  );
 };
 
 Page.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;

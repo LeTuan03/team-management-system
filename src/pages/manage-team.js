@@ -170,13 +170,13 @@ const Page = () => {
   return (
     <>
       <Head>
-        <title>Team management | Team management system</title>
+        <title>Team management | Football management system</title>
       </Head>
       <Box
         component="main"
         sx={{
           flexGrow: 1,
-          py: 2
+          py: 2,
         }}
       >
         <Container maxWidth="xl">
