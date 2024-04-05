@@ -36,3 +36,19 @@ export const getTopScorers = () => {
   let url = PATH + "/top-scorers";
   return axios.get(url);
 };
+
+export const getGoalHome = (payload) => {
+  let config = {
+    params: { ...payload },
+  };
+  let url = PATH + "/getGoalHome";
+  return axios.get(url, config);
+};
+
+export const getGoalAway = (payload) => {
+  let config = {
+    params: { ...payload },
+  };
+  let url = PATH + "/getGoalAway";
+  return axios.get(url, config);
+};

@@ -16,6 +16,7 @@ import { getAllTeam } from '../ManageTeam/ManageTeamServices';
 import { addMatch, updateMatch } from './ManageCalendarServices';
 import { toast } from 'react-toastify';
 import { getAllTournaments } from '../Tournaments/TournamentsServices';
+import { getAllTeamAway } from '../ManageTeamAway/ManageTeamAwayServices';
 
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
@@ -36,6 +37,7 @@ export default function ManageCalendarDialog(props) {
     } = props;
     const [dataState, setDataState] = React.useState({});
     const [listTeam, setListTeam] = React.useState([]);
+    const [listTeamAway, setListTeamAway] = React.useState([]);
     const [listTournaments, setListTournaments] = React.useState([]);
 
     const validateSubmit = () => {
@@ -45,7 +47,7 @@ export default function ManageCalendarDialog(props) {
         return {
             IDMatch: value?.matchID,
             HomeTeamID: value?.homeTeam?.idteam,
-            AwayTeamID: value?.awayTeam?.idteam,
+            AwayTeamID: value?.awayTeam?.idAwayTeam,
             MatchDate: value?.matchDate,
             status: value?.status?.name,
             LoaiTranDau: value?.loaiTranDau?.name === OBJECT_TYPE_MATCH.Official.name ? 'chinhthuc' : value?.loaiTranDau?.name,
@@ -84,6 +86,8 @@ export default function ManageCalendarDialog(props) {
         try {
             const data = await getAllTeam();
             setListTeam(data?.data);
+            const data2 = await getAllTeamAway();
+            setListTeamAway(data2?.data);
         } catch (error) {
             console.error(error);
         }
@@ -252,10 +256,10 @@ export default function ManageCalendarDialog(props) {
                                 id="combo-box"
                                 size="small"
                                 fullWidth
-                                options={listTeam}
+                                options={listTeamAway}
                                 onChange={(event, value) => handleSetData(value, "awayTeam")}
                                 value={dataState?.awayTeam || null}
-                                getOptionLabel={(option) => option.teamName || ""}
+                                getOptionLabel={(option) => option.teamAwayName || ""}
                                 filterOptions={filterOptions}
                                 renderInput={(params) => (
                                     <TextValidator

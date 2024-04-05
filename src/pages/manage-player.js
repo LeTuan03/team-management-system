@@ -1,8 +1,5 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Head from "next/head";
-import { subDays, subHours } from "date-fns";
-import ArrowDownOnSquareIcon from "@heroicons/react/24/solid/ArrowDownOnSquareIcon";
-import ArrowUpOnSquareIcon from "@heroicons/react/24/solid/ArrowUpOnSquareIcon";
 import PencilIcon from "@heroicons/react/24/solid/PencilIcon";
 import TrashIcon from "@heroicons/react/24/solid/TrashIcon";
 import PlusIcon from "@heroicons/react/24/solid/PlusIcon";
@@ -17,10 +14,7 @@ import {
   SvgIcon,
   Typography,
 } from "@mui/material";
-import { useSelection } from "src/hooks/use-selection";
 import { Layout as DashboardLayout } from "src/layouts/dashboard/layout";
-import { CustomersSearch } from "src/sections/customer/customers-search";
-import { applyPagination } from "src/utils/apply-pagination";
 import { ManagePlayerTable } from "src/view/ManagePlayer/ManagePlayerTable";
 import Tooltip from "@material-ui/core/Tooltip";
 import { withStyles } from "@material-ui/core/styles";
@@ -126,14 +120,14 @@ const Page = () => {
     try {
       const data = await getAllPlayer();
       if (data.status === CODE.SUCCESS) {
-        let filteredList = data.data;
-
+        let filteredList = data.data?.filter((i) => i?.shows);
+        //lọc theo id của team khi chọn team để hiển thị ra bảng
         if (dataState?.team?.idteam) {
           filteredList = filteredList.filter(
             (player) => player?.team?.idteam === dataState.team.idteam
           );
         }
-
+        //lọc theo vị trí cầu thủ chơi để hiển thị ra bảng
         if (dataState?.position?.code) {
           filteredList = filteredList.filter(
             (player) => player?.position === dataState.position.name
@@ -198,7 +192,8 @@ const Page = () => {
     {
       title: "Country",
       field: "country",
-      minWidth: 200,
+      minWidth: 100,
+      align: "center",
     },
     {
       title: "Position",
@@ -209,18 +204,18 @@ const Page = () => {
     {
       title: "Jersey Number",
       field: "jerseyNumber",
-      minWidth: 150,
+      minWidth: 140,
       align: "center",
     },
     {
       title: "Email",
       field: "email",
-      minWidth: 300,
+      minWidth: 250,
     },
     {
       title: "Phone",
       field: "phone",
-      minWidth: 200,
+      minWidth: 150,
     },
     {
       title: "Height",
@@ -233,6 +228,12 @@ const Page = () => {
       field: "weight",
       minWidth: 100,
       align: "center",
+    },
+    {
+      title: "The team is competing",
+      field: "team",
+      minWidth: 250,
+      render: (rowData) => rowData?.team?.teamName,
     },
     {
       title: "Contract Start Date",

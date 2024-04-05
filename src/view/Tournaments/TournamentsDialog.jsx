@@ -113,7 +113,7 @@ export default function TournamentsDialog(props) {
                                 className='w-100'
                                 type='date'
                                 name="startDate"
-                                value={dataState?.startDate}
+                                value={dataState?.startDate || new Date()}
                                 onChange={(event) => handleSetData(event.target.value, "startDate")}
                             />
                         </Grid>
@@ -123,7 +123,7 @@ export default function TournamentsDialog(props) {
                                 className='w-100'
                                 type='date'
                                 name="endDate"
-                                value={dataState?.endDate}
+                                value={dataState?.endDate || new Date()}
                                 onChange={(event) => handleSetData(event.target.value, "endDate")}
                             />
                         </Grid>

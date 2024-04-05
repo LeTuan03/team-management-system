@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Head from "next/head";
 import PencilIcon from "@heroicons/react/24/solid/PencilIcon";
 import TrashIcon from "@heroicons/react/24/solid/TrashIcon";
@@ -11,18 +11,19 @@ import {
   IconButton,
   Stack,
   SvgIcon,
-  Tab,
-  Tabs,
   Typography,
 } from "@mui/material";
 import { Layout as DashboardLayout } from "src/layouts/dashboard/layout";
+import { ManagePlayerTable } from "src/view/ManagePlayer/ManagePlayerTable";
 import Tooltip from "@material-ui/core/Tooltip";
 import { withStyles } from "@material-ui/core/styles";
-import { ManageCalendarTable } from "src/view/ManageCalendar/ManageCalendarTable";
-import ManageCalendarDialog from "src/view/ManageCalendar/ManageCalendarDialog";
-import { StatisticsAnalysisTable } from "src/view/StatisticsAnalysis/StatisticsAnalysisTable";
-import { TabPanel } from "@mui/lab";
-import PropTypes from "prop-types";
+import { CODE } from "src/AppConst";
+import ConfirmDialog from "src/view/Dialog/ConfirmDialog";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { ManageTeamAwayTable } from "src/view/ManageTeamAway/ManageTeamAwayTable";
+import ManageTeamAwayDialog from "src/view/ManageTeamAway/ManageTeamAwayDialog";
+import { deleteTeamAway, getAllTeamAway } from "src/view/ManageTeamAway/ManageTeamAwayServices";
 
 const LightTooltip = withStyles((theme) => ({
   tooltip: {
@@ -72,53 +73,72 @@ function MaterialButton(props) {
   );
 }
 
-TabPanel.propTypes = {
-  children: PropTypes.node,
-  index: PropTypes.number.isRequired,
-  value: PropTypes.number.isRequired,
-};
-
-function a11yProps(index) {
-  return {
-    id: `vertical-tab-${index}`,
-    "aria-controls": `vertical-tabpanel-${index}`,
-  };
-}
-
 const Page = () => {
   const [listItem, setListItem] = useState([]);
   const [item, setItem] = useState(null);
 
   const [open, setOpen] = useState(false);
-
-  const [tabValue, setTabValue] = useState(0);
-
-  const handleChangeTabValue = (event, newTabValue) => {
-    setTabValue(newTabValue);
-  };
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
 
   const handleClickOpen = () => {
     setOpen(true);
   };
+
   const handleClose = () => {
     setOpen(false);
+    setOpenDeleteDialog(false);
+    setItem(null);
   };
 
   const handleEdit = (data) => {
     setOpen(true);
     setItem(data);
   };
-  const handleDelete = (id) => {};
+
+  const handleDelete = (id) => {
+    setItem(id);
+    setOpenDeleteDialog(true);
+  };
+
+  const handleYesDelete = async () => {
+    try {
+      const data = await deleteTeamAway(item);
+      toast.success("Delete team success");
+      updatePageData();
+      handleClose();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const updatePageData = async () => {
+    try {
+      const data = await getAllTeamAway();
+      if (data.status === CODE.SUCCESS) {
+        setListItem(data.data?.filter((i) => i?.shows));
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   useEffect(() => {
-    //fake data
-    setListItem([
-      { name: "Mehmet", surname: "Baran", birthYear: 1987, birthCity: 63 },
-      { name: "Zerya Betül", surname: "Baran", birthYear: 2017, birthCity: 34 },
-    ]);
+    updatePageData();
   }, []);
 
   const columns = [
+    {
+      title: "Team away name",
+      field: "teamAwayName",
+    },
+    {
+      title: "Country away",
+      field: "countryAway",
+    },
+    {
+      title: "Coach away Name",
+      field: "coachAwayName",
+    },
     {
       title: "Action",
       field: "",
@@ -132,36 +152,20 @@ const Page = () => {
             if (method === 0) {
               handleEdit(rowData);
             } else if (method === 1) {
-              handleDelete(rowData.id);
+              handleDelete(rowData.idAwayTeam);
             } else {
-              alert("Call Selected Here:" + rowData.id);
+              alert("Call Selected Here:" + rowData.idAwayTeam);
             }
           }}
         />
       ),
-    },
-    {
-      title: "Name",
-      field: "name",
-    },
-    {
-      title: "Surname",
-      field: "surname",
-    },
-    {
-      title: "Birth Year",
-      field: "birthYear",
-    },
-    {
-      title: "Birth Place",
-      field: "birthCity",
     },
   ];
 
   return (
     <>
       <Head>
-        <title>Statistics and analysis | Football management system</title>
+        <title>Team management | Football management system</title>
       </Head>
       <Box
         component="main"
@@ -174,35 +178,45 @@ const Page = () => {
           <Stack spacing={3}>
             <Stack direction="row" justifyContent="space-between" spacing={4}>
               <Stack spacing={1}>
-                <Typography variant="h4">Statistics and analysis</Typography>
+                <Typography variant="h4">List teams away</Typography>
               </Stack>
+              <div>
+                <Button
+                  startIcon={
+                    <SvgIcon fontSize="small">
+                      <PlusIcon />
+                    </SvgIcon>
+                  }
+                  onClick={handleClickOpen}
+                  variant="contained"
+                >
+                  Add
+                </Button>
+              </div>
             </Stack>
-            <Tabs
-              value={tabValue}
-              onChange={handleChangeTabValue}
-              variant="scrollable"
-              scrollButtons="auto"
-              aria-label="scrollable auto tabs example"
-            >
-              <Tab sx={{ minWidth: 200 }} label="Performance statistics" {...a11yProps(0)} />
-              <Tab sx={{ minWidth: 200 }} label="Statistics of match results" {...a11yProps(1)} />
-              <Tab sx={{ minWidth: 200 }} label="Charts rank" {...a11yProps(2)} />
-            </Tabs>
-            <Box sx={{ mt: 4 }}>
-              {tabValue === 0 && <StatisticsAnalysisTable columns={columns} listItem={listItem} />}
-              {tabValue === 1 && <StatisticsAnalysisTable columns={columns} listItem={listItem} />}
-              {tabValue === 2 && <StatisticsAnalysisTable columns={columns} listItem={listItem} />}
-            </Box>
+            <ManageTeamAwayTable columns={columns} listItem={listItem} />
           </Stack>
         </Container>
       </Box>
       <div>
-        {/* <ManageCalendarDialog
-          open={open}
-          handleClose={handleClose}
-          item={item}
-        /> */}
+        {open && (
+          <ManageTeamAwayDialog
+            open={open}
+            item={item}
+            handleClose={handleClose}
+            updatePageData={updatePageData}
+          />
+        )}
+        {openDeleteDialog && (
+          <ConfirmDialog
+            open={openDeleteDialog}
+            text={"Confirm delete this team"}
+            handleClose={handleClose}
+            handleOk={handleYesDelete}
+          />
+        )}
       </div>
+      <ToastContainer autoClose={1000} />
     </>
   );
 };

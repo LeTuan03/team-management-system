@@ -119,7 +119,7 @@ const Page = () => {
     try {
       const data = await getAllTournaments();
       if (data.status === CODE.SUCCESS) {
-        setListItem(data?.data);
+        setListItem(data?.data?.filter((i) => i?.shows));
       }
     } catch (error) {
       console.error(error);

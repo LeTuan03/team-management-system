@@ -32,6 +32,7 @@ import ConfirmDialog from "src/view/Dialog/ConfirmDialog";
 import DialogPlayerInfo from "src/view/ManageCalendar/DialogPlayerInfo";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import ManageCalendarSearch from "src/view/ManageCalendar/ManageCalendarSearch";
 
 const LightTooltip = withStyles((theme) => ({
   tooltip: {
@@ -147,6 +148,7 @@ const Page = () => {
   const [openInfo, setOpenInfo] = useState(false);
   const [openInfoGoal, setOpenInfoGoal] = useState(false);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+  const [dataState, setDataState] = useState({});
 
   const [value, setValue] = useState(0);
 
@@ -196,6 +198,7 @@ const Page = () => {
       console.error(error);
     }
   };
+
   const updatePageData = async () => {
     try {
       const data = await getAllMatch();
@@ -218,6 +221,9 @@ const Page = () => {
               i?.loaiTranDau === OBJECT_TYPE_MATCH.Official.name || i?.loaiTranDau === "chinhthuc"
           );
         }
+        if (dataState?.status?.code) {
+          listItemFilter = data?.data?.filter((i) => i?.status === dataState?.status?.name);
+        }
         setListItem(listItemFilter);
       }
     } catch (error) {
@@ -238,13 +244,17 @@ const Page = () => {
     }
   };
 
+  const handleChangeData = (value, name) => {
+    setDataState((pre) => ({ ...pre, [name]: value }));
+  };
+
   useEffect(() => {
     updatePageData();
   }, []);
 
   useEffect(() => {
     updatePageData();
-  }, [value]);
+  }, [value, dataState]);
 
   const columns = [
     {
@@ -264,7 +274,7 @@ const Page = () => {
       title: "Away Team",
       field: "awayTeam",
       minWidth: "200px",
-      render: (rowData) => rowData?.awayTeam?.teamName,
+      render: (rowData) => rowData?.awayTeam?.teamAwayName,
     },
     {
       title: "Home Team Score",
@@ -350,8 +360,10 @@ const Page = () => {
                 </Button>
               </div>
             </Stack>
-            {/* <CustomersSearch /> */}
           </Stack>
+
+          <ManageCalendarSearch dataState={dataState} handleChangeData={handleChangeData} />
+
           <AppBar position="static" color="default" style={{ marginTop: 30 }}>
             <Tabs
               value={value}

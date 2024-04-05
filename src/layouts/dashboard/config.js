@@ -50,6 +50,15 @@ export const items = () => {
         </SvgIcon>
       ),
     },
+    isCoach && {
+      title: "Team away management",
+      path: "/manage-team-away",
+      icon: (
+        <SvgIcon fontSize="small">
+          <UserGroupIcon />
+        </SvgIcon>
+      ),
+    },
     {
       title: "Schedule and matches",
       path: "/manage-calendar",

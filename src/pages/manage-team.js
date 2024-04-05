@@ -1,8 +1,5 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Head from "next/head";
-import { subDays, subHours } from "date-fns";
-import ArrowDownOnSquareIcon from "@heroicons/react/24/solid/ArrowDownOnSquareIcon";
-import ArrowUpOnSquareIcon from "@heroicons/react/24/solid/ArrowUpOnSquareIcon";
 import PencilIcon from "@heroicons/react/24/solid/PencilIcon";
 import TrashIcon from "@heroicons/react/24/solid/TrashIcon";
 import PlusIcon from "@heroicons/react/24/solid/PlusIcon";
@@ -16,10 +13,7 @@ import {
   SvgIcon,
   Typography,
 } from "@mui/material";
-import { useSelection } from "src/hooks/use-selection";
 import { Layout as DashboardLayout } from "src/layouts/dashboard/layout";
-import { CustomersSearch } from "src/sections/customer/customers-search";
-import { applyPagination } from "src/utils/apply-pagination";
 import { ManagePlayerTable } from "src/view/ManagePlayer/ManagePlayerTable";
 import Tooltip from "@material-ui/core/Tooltip";
 import { withStyles } from "@material-ui/core/styles";
@@ -120,7 +114,7 @@ const Page = () => {
     try {
       const data = await getAllTeam();
       if (data.status === CODE.SUCCESS) {
-        setListItem(data?.data);
+        setListItem(data.data?.filter((i) => i?.shows));
       }
     } catch (error) {
       console.error(error);
@@ -199,7 +193,6 @@ const Page = () => {
                 </Button>
               </div>
             </Stack>
-            {/* <CustomersSearch /> */}
             <ManagePlayerTable columns={columns} listItem={listItem} />
           </Stack>
         </Container>
