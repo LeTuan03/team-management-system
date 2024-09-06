@@ -177,25 +177,25 @@ export const OverviewCard = (props) => {
             <TableHead>
               <TableRow>
                 <TableCell style={{ background: "#EBEEFE" }}>Home Team</TableCell>
-                <TableCell style={{ background: "#EBEEFE" }}>Away Team</TableCell>
+                {/* <TableCell style={{ background: "#EBEEFE" }}>Away Team</TableCell> */}
                 <TableCell style={{ background: "#EBEEFE" }} align="center">
                   Home Goals
                 </TableCell>
-                <TableCell style={{ background: "#EBEEFE" }} align="center">
+                {/* <TableCell style={{ background: "#EBEEFE" }} align="center">
                   Away Goals
-                </TableCell>
+                </TableCell> */}
                 <TableCell style={{ background: "#EBEEFE" }} align="center">
                   Red Card Home
                 </TableCell>
-                <TableCell style={{ background: "#EBEEFE" }} align="center">
+                {/* <TableCell style={{ background: "#EBEEFE" }} align="center">
                   Red Card Away
-                </TableCell>
+                </TableCell> */}
                 <TableCell style={{ background: "#EBEEFE" }} align="center">
                   Yellow Card Home
                 </TableCell>
-                <TableCell style={{ background: "#EBEEFE" }} align="center">
+                {/* <TableCell style={{ background: "#EBEEFE" }} align="center">
                   Yellow Card Away
-                </TableCell>
+                </TableCell> */}
                 <TableCell style={{ background: "#EBEEFE" }} align="center">
                   Tournament
                 </TableCell>
@@ -214,13 +214,13 @@ export const OverviewCard = (props) => {
                     return (
                       <TableRow hover key={order.id}>
                         <TableCell sx={{ minWidth: "150px" }}>{order.homeTeamName}</TableCell>
-                        <TableCell sx={{ minWidth: "150px" }}>{order.awayTeamName}</TableCell>
+                        {/* <TableCell sx={{ minWidth: "150px" }}>{order.awayTeamName}</TableCell> */}
                         <TableCell align="center">{order.totalGoalHome}</TableCell>
-                        <TableCell align="center">{order.totalGoalAway}</TableCell>
+                        {/* <TableCell align="center">{order.totalGoalAway}</TableCell> */}
                         <TableCell align="center">{order.totalRedHome}</TableCell>
-                        <TableCell align="center">{order.totalRedAway}</TableCell>
+                        {/* <TableCell align="center">{order.totalRedAway}</TableCell> */}
                         <TableCell align="center">{order.totalYellowHome}</TableCell>
-                        <TableCell align="center">{order.totalYellowAway}</TableCell>
+                        {/* <TableCell align="center">{order.totalYellowAway}</TableCell> */}
                         <TableCell align="center">{order.nametour}</TableCell>
                         <TableCell align="center">
                           <LightTooltip

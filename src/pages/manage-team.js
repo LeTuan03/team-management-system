@@ -14,7 +14,6 @@ import {
   Typography,
 } from "@mui/material";
 import { Layout as DashboardLayout } from "src/layouts/dashboard/layout";
-import { ManagePlayerTable } from "src/view/ManagePlayer/ManagePlayerTable";
 import Tooltip from "@material-ui/core/Tooltip";
 import { withStyles } from "@material-ui/core/styles";
 import { deleteTeam, getAllTeam } from "src/view/ManageTeam/ManageTeamServices";
@@ -23,6 +22,7 @@ import ManageTeamDialog from "src/view/ManageTeam/ManageTeamDialog";
 import ConfirmDialog from "src/view/Dialog/ConfirmDialog";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { ManageTeamTable } from "src/view/ManageTeam/ManageTeamTable";
 
 const LightTooltip = withStyles((theme) => ({
   tooltip: {
@@ -38,36 +38,40 @@ function MaterialButton(props) {
   const item = props.item;
   return (
     <div className="none_wrap">
-      <LightTooltip
-        title={"Chỉnh sửa"}
-        placement="right-end"
-        enterDelay={300}
-        leaveDelay={200}
-        PopperProps={{
-          popperOptions: { modifiers: { offset: { enabled: true, offset: "10px, 0px" } } },
-        }}
-      >
-        <IconButton size="small" onClick={() => props.onSelect(item, 0)}>
-          <Icon fontSize="small" color="primary">
-            <PencilIcon />
-          </Icon>
-        </IconButton>
-      </LightTooltip>
-      <LightTooltip
-        title={"Xóa"}
-        placement="right-end"
-        enterDelay={300}
-        leaveDelay={200}
-        PopperProps={{
-          popperOptions: { modifiers: { offset: { enabled: true, offset: "10px, 0px" } } },
-        }}
-      >
-        <IconButton size="small" onClick={() => props.onSelect(item, 1)}>
-          <Icon fontSize="small" color="error">
-            <TrashIcon />
-          </Icon>
-        </IconButton>
-      </LightTooltip>
+      {item?.shows && (
+        <>
+          <LightTooltip
+            title={"Chỉnh sửa"}
+            placement="right-end"
+            enterDelay={300}
+            leaveDelay={200}
+            PopperProps={{
+              popperOptions: { modifiers: { offset: { enabled: true, offset: "10px, 0px" } } },
+            }}
+          >
+            <IconButton size="small" onClick={() => props.onSelect(item, 0)}>
+              <Icon fontSize="small" color="primary">
+                <PencilIcon />
+              </Icon>
+            </IconButton>
+          </LightTooltip>
+          <LightTooltip
+            title={"Xóa"}
+            placement="right-end"
+            enterDelay={300}
+            leaveDelay={200}
+            PopperProps={{
+              popperOptions: { modifiers: { offset: { enabled: true, offset: "10px, 0px" } } },
+            }}
+          >
+            <IconButton size="small" onClick={() => props.onSelect(item, 1)}>
+              <Icon fontSize="small" color="error">
+                <TrashIcon />
+              </Icon>
+            </IconButton>
+          </LightTooltip>
+        </>
+      )}
     </div>
   );
 }
@@ -78,6 +82,7 @@ const Page = () => {
 
   const [open, setOpen] = useState(false);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+  const [dataState, setDataState] = useState({});
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -114,12 +119,25 @@ const Page = () => {
     try {
       const data = await getAllTeam();
       if (data.status === CODE.SUCCESS) {
-        setListItem(data.data?.filter((i) => i?.shows));
+        let dataFilter = dataState?.checked ? data?.data : data?.data?.filter((i) => i?.shows);
+        setListItem(dataFilter);
       }
     } catch (error) {
       console.error(error);
     }
   };
+
+  const handleChangeData = (value, name) => {
+    if (name === "checked") {
+      setDataState((pre) => ({ ...pre, [name]: value.target.checked }));
+    } else {
+      setDataState((pre) => ({ ...pre, [name]: value }));
+    }
+  };
+
+  useEffect(() => {
+    updatePageData();
+  }, [dataState]);
 
   useEffect(() => {
     updatePageData();
@@ -193,7 +211,12 @@ const Page = () => {
                 </Button>
               </div>
             </Stack>
-            <ManagePlayerTable columns={columns} listItem={listItem} />
+            <ManageTeamTable
+              columns={columns}
+              listItem={listItem}
+              dataState={dataState}
+              handleChangeData={handleChangeData}
+            />
           </Stack>
         </Container>
       </Box>

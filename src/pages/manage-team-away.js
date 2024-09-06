@@ -39,36 +39,40 @@ function MaterialButton(props) {
   const item = props.item;
   return (
     <div className="none_wrap">
-      <LightTooltip
-        title={"Chỉnh sửa"}
-        placement="right-end"
-        enterDelay={300}
-        leaveDelay={200}
-        PopperProps={{
-          popperOptions: { modifiers: { offset: { enabled: true, offset: "10px, 0px" } } },
-        }}
-      >
-        <IconButton size="small" onClick={() => props.onSelect(item, 0)}>
-          <Icon fontSize="small" color="primary">
-            <PencilIcon />
-          </Icon>
-        </IconButton>
-      </LightTooltip>
-      <LightTooltip
-        title={"Xóa"}
-        placement="right-end"
-        enterDelay={300}
-        leaveDelay={200}
-        PopperProps={{
-          popperOptions: { modifiers: { offset: { enabled: true, offset: "10px, 0px" } } },
-        }}
-      >
-        <IconButton size="small" onClick={() => props.onSelect(item, 1)}>
-          <Icon fontSize="small" color="error">
-            <TrashIcon />
-          </Icon>
-        </IconButton>
-      </LightTooltip>
+      {item?.shows && (
+        <>
+          <LightTooltip
+            title={"Chỉnh sửa"}
+            placement="right-end"
+            enterDelay={300}
+            leaveDelay={200}
+            PopperProps={{
+              popperOptions: { modifiers: { offset: { enabled: true, offset: "10px, 0px" } } },
+            }}
+          >
+            <IconButton size="small" onClick={() => props.onSelect(item, 0)}>
+              <Icon fontSize="small" color="primary">
+                <PencilIcon />
+              </Icon>
+            </IconButton>
+          </LightTooltip>
+          <LightTooltip
+            title={"Xóa"}
+            placement="right-end"
+            enterDelay={300}
+            leaveDelay={200}
+            PopperProps={{
+              popperOptions: { modifiers: { offset: { enabled: true, offset: "10px, 0px" } } },
+            }}
+          >
+            <IconButton size="small" onClick={() => props.onSelect(item, 1)}>
+              <Icon fontSize="small" color="error">
+                <TrashIcon />
+              </Icon>
+            </IconButton>
+          </LightTooltip>
+        </>
+      )}
     </div>
   );
 }
@@ -79,6 +83,7 @@ const Page = () => {
 
   const [open, setOpen] = useState(false);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+  const [dataState, setDataState] = useState({});
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -115,12 +120,25 @@ const Page = () => {
     try {
       const data = await getAllTeamAway();
       if (data.status === CODE.SUCCESS) {
-        setListItem(data.data?.filter((i) => i?.shows));
+        let dataFilter = dataState?.checked ? data?.data : data?.data?.filter((i) => i?.shows);
+        setListItem(dataFilter);
       }
     } catch (error) {
       console.error(error);
     }
   };
+
+  const handleChangeData = (value, name) => {
+    if (name === "checked") {
+      setDataState((pre) => ({ ...pre, [name]: value.target.checked }));
+    } else {
+      setDataState((pre) => ({ ...pre, [name]: value }));
+    }
+  };
+
+  useEffect(() => {
+    updatePageData();
+  }, [dataState]);
 
   useEffect(() => {
     updatePageData();
@@ -194,7 +212,12 @@ const Page = () => {
                 </Button>
               </div>
             </Stack>
-            <ManageTeamAwayTable columns={columns} listItem={listItem} />
+            <ManageTeamAwayTable
+              columns={columns}
+              listItem={listItem}
+              dataState={dataState}
+              handleChangeData={handleChangeData}
+            />
           </Stack>
         </Container>
       </Box>

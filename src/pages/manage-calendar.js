@@ -23,7 +23,11 @@ import Tooltip from "@material-ui/core/Tooltip";
 import { withStyles } from "@material-ui/core/styles";
 import { ManageCalendarTable } from "src/view/ManageCalendar/ManageCalendarTable";
 import ManageCalendarDialog from "src/view/ManageCalendar/ManageCalendarDialog";
-import { deleteMatch, getAllMatch } from "src/view/ManageCalendar/ManageCalendarServices";
+import {
+  deleteMatch,
+  getAllMatch,
+  getByCaculate,
+} from "src/view/ManageCalendar/ManageCalendarServices";
 import { CODE, OBJECT_STATUS_MATCH, OBJECT_TYPE_MATCH } from "src/AppConst";
 import { format } from "date-fns";
 import PropTypes from "prop-types";
@@ -33,6 +37,7 @@ import DialogPlayerInfo from "src/view/ManageCalendar/DialogPlayerInfo";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ManageCalendarSearch from "src/view/ManageCalendar/ManageCalendarSearch";
+import { getAllTournaments } from "src/view/Tournaments/TournamentsServices";
 
 const LightTooltip = withStyles((theme) => ({
   tooltip: {
@@ -74,68 +79,72 @@ function MaterialButton(props) {
   const item = props.item;
   return (
     <div className="none_wrap">
-      <LightTooltip
-        title={"Chỉnh sửa"}
-        placement="right-end"
-        enterDelay={300}
-        leaveDelay={200}
-        PopperProps={{
-          popperOptions: { modifiers: { offset: { enabled: true, offset: "10px, 0px" } } },
-        }}
-      >
-        <IconButton size="small" onClick={() => props.onSelect(item, 0)}>
-          <Icon fontSize="small" color="primary">
-            <PencilIcon />
-          </Icon>
-        </IconButton>
-      </LightTooltip>
-      {item?.status !== OBJECT_STATUS_MATCH.Finished.name && (
-        <LightTooltip
-          title={"Xóa"}
-          placement="right-end"
-          enterDelay={300}
-          leaveDelay={200}
-          PopperProps={{
-            popperOptions: { modifiers: { offset: { enabled: true, offset: "10px, 0px" } } },
-          }}
-        >
-          <IconButton size="small" onClick={() => props.onSelect(item, 1)}>
-            <Icon fontSize="small" color="error">
-              <TrashIcon />
-            </Icon>
-          </IconButton>
-        </LightTooltip>
+      {item?.shows && (
+        <>
+          <LightTooltip
+            title={"Chỉnh sửa"}
+            placement="right-end"
+            enterDelay={300}
+            leaveDelay={200}
+            PopperProps={{
+              popperOptions: { modifiers: { offset: { enabled: true, offset: "10px, 0px" } } },
+            }}
+          >
+            <IconButton size="small" onClick={() => props.onSelect(item, 0)}>
+              <Icon fontSize="small" color="primary">
+                <PencilIcon />
+              </Icon>
+            </IconButton>
+          </LightTooltip>
+          {item?.status !== OBJECT_STATUS_MATCH.Finished.name && (
+            <LightTooltip
+              title={"Xóa"}
+              placement="right-end"
+              enterDelay={300}
+              leaveDelay={200}
+              PopperProps={{
+                popperOptions: { modifiers: { offset: { enabled: true, offset: "10px, 0px" } } },
+              }}
+            >
+              <IconButton size="small" onClick={() => props.onSelect(item, 1)}>
+                <Icon fontSize="small" color="error">
+                  <TrashIcon />
+                </Icon>
+              </IconButton>
+            </LightTooltip>
+          )}
+          <LightTooltip
+            title={"History"}
+            placement="right-end"
+            enterDelay={300}
+            leaveDelay={200}
+            PopperProps={{
+              popperOptions: { modifiers: { offset: { enabled: true, offset: "10px, 0px" } } },
+            }}
+          >
+            <IconButton size="small" onClick={() => props.onSelect(item, 2)}>
+              <Icon fontSize="small" color="default">
+                <ClockIcon />
+              </Icon>
+            </IconButton>
+          </LightTooltip>
+          <LightTooltip
+            title={"History"}
+            placement="right-end"
+            enterDelay={300}
+            leaveDelay={200}
+            PopperProps={{
+              popperOptions: { modifiers: { offset: { enabled: true, offset: "10px, 0px" } } },
+            }}
+          >
+            <IconButton size="small" onClick={() => props.onSelect(item, 3)}>
+              <Icon fontSize="small" color="success">
+                <DocumentCheckIcon />
+              </Icon>
+            </IconButton>
+          </LightTooltip>
+        </>
       )}
-      <LightTooltip
-        title={"History"}
-        placement="right-end"
-        enterDelay={300}
-        leaveDelay={200}
-        PopperProps={{
-          popperOptions: { modifiers: { offset: { enabled: true, offset: "10px, 0px" } } },
-        }}
-      >
-        <IconButton size="small" onClick={() => props.onSelect(item, 2)}>
-          <Icon fontSize="small" color="default">
-            <ClockIcon />
-          </Icon>
-        </IconButton>
-      </LightTooltip>
-      <LightTooltip
-        title={"History"}
-        placement="right-end"
-        enterDelay={300}
-        leaveDelay={200}
-        PopperProps={{
-          popperOptions: { modifiers: { offset: { enabled: true, offset: "10px, 0px" } } },
-        }}
-      >
-        <IconButton size="small" onClick={() => props.onSelect(item, 3)}>
-          <Icon fontSize="small" color="success">
-            <DocumentCheckIcon />
-          </Icon>
-        </IconButton>
-      </LightTooltip>
     </div>
   );
 }
@@ -222,12 +231,58 @@ const Page = () => {
           );
         }
         if (dataState?.status?.code) {
-          listItemFilter = data?.data?.filter((i) => i?.status === dataState?.status?.name);
+          listItemFilter = listItemFilter?.filter((i) => i?.status === dataState?.status?.name);
+        }
+        if (dataState?.checked) {
+          listItemFilter = listItemFilter;
+        } else {
+          listItemFilter = listItemFilter.filter((i) => i?.shows);
         }
         setListItem(listItemFilter);
       }
     } catch (error) {
       console.error(error);
+    }
+  };
+
+  const search = async () => {
+    try {
+      let obj = {};
+      obj.tuNgay = dataState?.tuNgay;
+      obj.denNgay = dataState?.denNgay;
+      obj.idTour = dataState?.tour?.IDTournaments;
+
+      const data = await getByCaculate(obj);
+      if (data.status === CODE.SUCCESS) {
+        let listItemFilter = [];
+        if (value === 0) {
+          listItemFilter = data?.data?.filter(
+            (i) => i?.loaiTranDau === OBJECT_TYPE_MATCH.Practice.name
+          );
+        }
+        if (value === 1) {
+          listItemFilter = data?.data?.filter(
+            (i) => i?.loaiTranDau === OBJECT_TYPE_MATCH.Friendly.name
+          );
+        }
+        if (value === 2) {
+          listItemFilter = data?.data?.filter(
+            (i) =>
+              i?.loaiTranDau === OBJECT_TYPE_MATCH.Official.name || i?.loaiTranDau === "chinhthuc"
+          );
+        }
+        if (dataState?.status?.code) {
+          listItemFilter = listItemFilter?.filter((i) => i?.status === dataState?.status?.name);
+        }
+        if (dataState?.checked) {
+          listItemFilter = listItemFilter;
+        } else {
+          listItemFilter = listItemFilter.filter((i) => i?.shows);
+        }
+        setListItem(listItemFilter);
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -245,16 +300,33 @@ const Page = () => {
   };
 
   const handleChangeData = (value, name) => {
-    setDataState((pre) => ({ ...pre, [name]: value }));
+    if (name === "checked") {
+      setDataState((pre) => ({ ...pre, [name]: value.target.checked }));
+    } else {
+      setDataState((pre) => ({ ...pre, [name]: value }));
+    }
+  };
+
+  const getListTournament = async () => {
+    try {
+      const data = await getAllTournaments();
+      let dataFilter = dataState?.checked ? data?.data : data?.data?.filter((i) => i?.shows);
+      setDataState((pre) => ({ ...pre, tournament: dataFilter }));
+    } catch (error) {}
   };
 
   useEffect(() => {
     updatePageData();
+    getListTournament();
   }, []);
 
   useEffect(() => {
     updatePageData();
-  }, [value, dataState]);
+  }, [value, dataState.status, dataState.checked]);
+
+  useEffect(() => {
+    search();
+  }, [dataState.tuNgay, dataState.denNgay, dataState.tour]);
 
   const columns = [
     {

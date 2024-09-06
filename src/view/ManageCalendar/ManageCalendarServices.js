@@ -52,3 +52,11 @@ export const getGoalAway = (payload) => {
   let url = PATH + "/getGoalAway";
   return axios.get(url, config);
 };
+
+export const getByCaculate = (payload) => {
+  let config = {
+    params: { ...payload },
+  };
+  let url = PATH + "/getByCaculate";
+  return axios.get(url, config);
+};

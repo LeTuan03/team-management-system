@@ -48,7 +48,7 @@ export const ManagePlayerTable = (props) => {
   return (
     <Card>
       <MaterialTable
-        title={''}
+        title=""
         columns={columns}
         data={listItem}
         // localization={{

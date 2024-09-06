@@ -42,36 +42,40 @@ function MaterialButton(props) {
   const item = props.item;
   return (
     <div className="none_wrap">
-      <LightTooltip
-        title={"Chỉnh sửa"}
-        placement="right-end"
-        enterDelay={300}
-        leaveDelay={200}
-        PopperProps={{
-          popperOptions: { modifiers: { offset: { enabled: true, offset: "10px, 0px" } } },
-        }}
-      >
-        <IconButton size="small" onClick={() => props.onSelect(item, 0)}>
-          <Icon fontSize="small" color="primary">
-            <PencilIcon />
-          </Icon>
-        </IconButton>
-      </LightTooltip>
-      <LightTooltip
-        title={"Xóa"}
-        placement="right-end"
-        enterDelay={300}
-        leaveDelay={200}
-        PopperProps={{
-          popperOptions: { modifiers: { offset: { enabled: true, offset: "10px, 0px" } } },
-        }}
-      >
-        <IconButton size="small" onClick={() => props.onSelect(item, 1)}>
-          <Icon fontSize="small" color="error">
-            <TrashIcon />
-          </Icon>
-        </IconButton>
-      </LightTooltip>
+      {item?.shows && (
+        <>
+          <LightTooltip
+            title={"Chỉnh sửa"}
+            placement="right-end"
+            enterDelay={300}
+            leaveDelay={200}
+            PopperProps={{
+              popperOptions: { modifiers: { offset: { enabled: true, offset: "10px, 0px" } } },
+            }}
+          >
+            <IconButton size="small" onClick={() => props.onSelect(item, 0)}>
+              <Icon fontSize="small" color="primary">
+                <PencilIcon />
+              </Icon>
+            </IconButton>
+          </LightTooltip>
+          <LightTooltip
+            title={"Xóa"}
+            placement="right-end"
+            enterDelay={300}
+            leaveDelay={200}
+            PopperProps={{
+              popperOptions: { modifiers: { offset: { enabled: true, offset: "10px, 0px" } } },
+            }}
+          >
+            <IconButton size="small" onClick={() => props.onSelect(item, 1)}>
+              <Icon fontSize="small" color="error">
+                <TrashIcon />
+              </Icon>
+            </IconButton>
+          </LightTooltip>
+        </>
+      )}
     </div>
   );
 }
@@ -120,7 +124,7 @@ const Page = () => {
     try {
       const data = await getAllPlayer();
       if (data.status === CODE.SUCCESS) {
-        let filteredList = data.data?.filter((i) => i?.shows);
+        let filteredList = dataState?.checked ? data?.data : data?.data?.filter((i) => i?.shows);
         //lọc theo id của team khi chọn team để hiển thị ra bảng
         if (dataState?.team?.idteam) {
           filteredList = filteredList.filter(
@@ -133,7 +137,6 @@ const Page = () => {
             (player) => player?.position === dataState.position.name
           );
         }
-
         setListItem(filteredList);
       }
     } catch (error) {
@@ -153,7 +156,11 @@ const Page = () => {
   };
 
   const handleChangeData = (value, name) => {
-    setDataState((pre) => ({ ...pre, [name]: value }));
+    if (name === "checked") {
+      setDataState((pre) => ({ ...pre, [name]: value.target.checked }));
+    } else {
+      setDataState((pre) => ({ ...pre, [name]: value }));
+    }
   };
 
   useEffect(() => {

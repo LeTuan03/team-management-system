@@ -19,6 +19,9 @@ import Remove from '@material-ui/icons/Remove';
 import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
+import Switch from '@mui/material/Switch';
+import FormGroup from '@mui/material/FormGroup';
+import FormControlLabel from '@mui/material/FormControlLabel'
 
 const tableIcons = {
     Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -42,13 +45,23 @@ const tableIcons = {
 export const TournamentsTable = (props) => {
     const {
         columns,
-        listItem
+        listItem,
+        dataState,
+        handleChangeData
     } = props;
 
     return (
         <Card>
             <MaterialTable
-                title={''}
+                title={<FormGroup sx={{ pt: 1 }} >
+                    <FormControlLabel
+                        control={
+                            <Switch
+                                color="warning"
+                                checked={dataState?.checked}
+                                onChange={(value) => handleChangeData(value, "checked")}
+                            />} label="Is all" />
+                </FormGroup>}
                 columns={columns}
                 data={listItem}
                 // localization={{

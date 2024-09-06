@@ -26,7 +26,7 @@ const DialogGoalReport = ({ open, handleClose, item }) => {
                 </DialogTitle>
                 <DialogContent dividers>
                     <Grid container spacing={2}>
-                        {['home', 'away'].map((team) => (
+                        {['home'].map((team) => (
                             <Grid key={team} item md={12} sm={12} xs={12} container>
                                 <SeverityPill color={"success"}>{team === 'home' ? 'Home team - ' + dataState?.homeName : 'Away team - ' + dataState?.awayName}</SeverityPill>
                                 <Grid md={12} sm={12} xs={12} sx={{ mt: 2 }}>
